@@ -1,0 +1,3856 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jurify Monitor · Central de Indicativos & Relatórios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       JURIFY ENTERPRISE · APPLE MOTION & QUIET LUXURY DESIGN
+       - Ícones oficiais nativos Jurify
+       - Relatórios com fila assíncrona de processamento
+       - Distinção clara e evidente entre Citação e Audiência
+       - Calendar Chips para audiências e badges dedicados para citações
+       - Tabelas 100% fluidas sem cortes de colunas
+       - Sidebar retrátil suave acelerada por GPU
+    ============================================================ */
+    :root {
+      --bg-page: #f8fafc;
+      --surface: #ffffff;
+      --surface-subtle: #f1f5f9;
+      
+      --brand-blue: #0f4cd9;
+      --brand-blue-hover: #0c3eb3;
+      --brand-blue-soft: #eff6ff;
+      --brand-blue-border: #bfdbfe;
+
+      --text-main: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --text-subtle: #94a3b8;
+
+      --border-color: #e2e8f0;
+      --border-subtle: #f1f5f9;
+      --border-hover: #cbd5e1;
+
+      /* Citação Accent (Esmeralda Neutro) */
+      --cit-accent: #059669;
+      --cit-badge-bg: #ecfdf5;
+      --cit-badge-text: #065f46;
+      --cit-badge-border: #a7f3d0;
+
+      /* Audiência Accent (Royal Blue / Calendário) */
+      --aud-accent: #2563eb;
+      --aud-badge-bg: #eff6ff;
+      --aud-badge-text: #1e40af;
+      --aud-badge-border: #bfdbfe;
+
+      /* Status quiet luxury */
+      --tag-forte-bg: #f0fdf4;
+      --tag-forte-text: #166534;
+      --tag-forte-border: #bbf7d0;
+
+      --tag-medio-bg: #fefce8;
+      --tag-medio-text: #854d0e;
+      --tag-medio-border: #fef08a;
+
+      --tag-fraco-bg: #f8fafc;
+      --tag-fraco-text: #475569;
+      --tag-fraco-border: #e2e8f0;
+
+      --tag-designada-bg: #eff6ff;
+      --tag-designada-text: #1d4ed8;
+      --tag-designada-border: #bfdbfe;
+
+      --tag-realizada-bg: #f1f5f9;
+      --tag-realizada-text: #475569;
+      --tag-realizada-border: #e2e8f0;
+
+      --tag-pendente-bg: #fffbeb;
+      --tag-pendente-text: #b45309;
+      --tag-pendente-border: #fde68a;
+
+      --tag-aprovada-bg: #f0fdf4;
+      --tag-aprovada-text: #15803d;
+      --tag-aprovada-border: #bbf7d0;
+
+      --tag-rejeitada-bg: #fef2f2;
+      --tag-rejeitada-text: #b91c1c;
+      --tag-rejeitada-border: #fecaca;
+
+      --sidebar-width: 240px;
+      --sidebar-collapsed-width: 68px;
+      --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      background: var(--bg-page);
+      color: var(--text-main);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .font-mono {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-feature-settings: 'tnum', 'zero';
+    }
+
+    /* ÍCONES OFICIAIS JURIFY */
+    .j-icon {
+      width: 17px;
+      height: 17px;
+      stroke-width: 1.75;
+      stroke: currentColor;
+      fill: none;
+      flex-shrink: 0;
+      vertical-align: middle;
+      display: inline-block;
+      transition: transform 0.18s ease;
+    }
+
+    .j-icon-sm {
+      width: 14px;
+      height: 14px;
+      stroke-width: 1.75;
+    }
+
+    .j-icon-lg {
+      width: 20px;
+      height: 20px;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 999px;
+    }
+
+    /* ============================================================
+       SIDEBAR RETRÁTIL COM DESIGN MOTION
+    ============================================================ */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: #ffffff;
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      z-index: 40;
+      transition: width 0.28s var(--ease-apple);
+      position: relative;
+    }
+
+    .sidebar.collapsed {
+      width: var(--sidebar-collapsed-width);
+    }
+
+    .sidebar-header {
+      height: 60px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--brand-blue);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 750;
+      font-size: 15px;
+      flex-shrink: 0;
+      letter-spacing: -0.03em;
+      transition: transform 0.2s var(--ease-spring);
+    }
+
+    .brand-group:hover .brand-icon {
+      transform: scale(1.06);
+    }
+
+    .brand-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+      transition: opacity 0.18s ease;
+    }
+
+    .sidebar.collapsed .brand-name {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .collapse-toggle-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s var(--ease-apple);
+      flex-shrink: 0;
+    }
+
+    .collapse-toggle-btn:hover {
+      background: #f8fafc;
+      color: var(--text-main);
+      border-color: var(--border-hover);
+      transform: scale(1.05);
+    }
+
+    .collapse-toggle-btn svg {
+      width: 14px;
+      height: 14px;
+      stroke-width: 2;
+      transition: transform 0.28s var(--ease-apple);
+    }
+
+    .sidebar.collapsed .collapse-toggle-btn svg {
+      transform: rotate(180deg);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      list-style: none;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .sidebar-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-subtle);
+      padding: 12px 10px 4px;
+      white-space: nowrap;
+      transition: opacity 0.15s ease;
+    }
+
+    .sidebar.collapsed .sidebar-section-title {
+      opacity: 0;
+      height: 0;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar-item a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 38px;
+      padding: 0 10px;
+      border-radius: 7px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.16s var(--ease-apple);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .sidebar-item a:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+      transform: translateX(2px);
+    }
+
+    .sidebar-item.active a {
+      background: var(--brand-blue-soft);
+      color: var(--brand-blue);
+      font-weight: 600;
+      transform: none;
+    }
+
+    .sidebar-item:hover .j-icon {
+      transform: scale(1.1);
+    }
+
+    .sidebar-item-label {
+      flex: 1;
+      transition: opacity 0.18s ease;
+    }
+
+    .sidebar.collapsed .sidebar-item-label {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .nav-badge {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 1px 7px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      letter-spacing: -0.01em;
+      transition: all 0.2s var(--ease-apple);
+    }
+
+    .sidebar-item.active .nav-badge {
+      background: #ffffff;
+      color: var(--brand-blue);
+      border-color: var(--brand-blue-border);
+      box-shadow: 0 1px 2px rgba(15, 76, 217, 0.1);
+    }
+
+    .sidebar.collapsed .nav-badge {
+      display: none;
+    }
+
+    .sidebar-footer {
+      padding: 14px 12px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .user-info-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .user-details {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      white-space: nowrap;
+      transition: opacity 0.18s ease;
+    }
+
+    .user-name {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-email {
+      font-size: 11px;
+      color: var(--text-muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar.collapsed .user-details {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       MAIN WRAPPER & HEADER
+    ============================================================ */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: var(--bg-page);
+    }
+
+    .content-area {
+      width: 100%;
+      padding: 24px 32px 48px;
+      max-width: 1680px;
+      margin: 0 auto;
+    }
+
+    .app-section {
+      display: none;
+      animation: sectionEnter 0.28s var(--ease-apple);
+    }
+
+    .app-section.active {
+      display: block;
+    }
+
+    @keyframes sectionEnter {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .top-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--brand-blue);
+      margin-bottom: 4px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+
+    .page-desc {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      max-width: 860px;
+      line-height: 1.45;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    /* Botões com Micro-interações */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      height: 36px;
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 7px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.16s var(--ease-apple);
+      text-decoration: none;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-primary {
+      background: var(--brand-blue);
+      color: #ffffff;
+      border-color: var(--brand-blue);
+      box-shadow: 0 1px 3px rgba(15, 76, 217, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: var(--brand-blue-hover);
+      border-color: var(--brand-blue-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(15, 76, 217, 0.28);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--text-main);
+      border-color: var(--border-color);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+
+    .btn-secondary:hover {
+      background: #f8fafc;
+      border-color: var(--border-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-sm {
+      height: 28px;
+      padding: 0 10px;
+      font-size: 12px;
+      border-radius: 5px;
+    }
+
+    .btn-icon {
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-icon:hover {
+      transform: scale(1.1);
+    }
+
+    /* ============================================================
+       KPI STATS GRID COM DESIGN MOTION
+    ============================================================ */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      transition: all 0.22s var(--ease-apple);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+      transform: translateY(-2px);
+    }
+
+    .stat-header {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .stat-number {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.03em;
+      font-feature-settings: 'tnum', 'zero';
+      transition: color 0.2s ease;
+    }
+
+    .stat-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* ============================================================
+       TOOLBAR & SLIDING SEGMENTED CONTROL (APPLE MOTION)
+    ============================================================ */
+    .toolbar-bar {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+      flex-wrap: wrap;
+    }
+
+    .segmented-tabs {
+      display: inline-flex;
+      background: #f1f5f9;
+      padding: 3px;
+      border-radius: 8px;
+      gap: 2px;
+    }
+
+    .seg-pill {
+      border: none;
+      background: transparent;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s var(--ease-apple);
+      user-select: none;
+      position: relative;
+    }
+
+    .seg-pill:hover {
+      color: var(--text-main);
+    }
+
+    .seg-pill.active {
+      background: #ffffff;
+      color: var(--text-main);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      transform: scale(1.02);
+    }
+
+    .seg-count {
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 8px;
+      background: #e2e8f0;
+      color: var(--text-secondary);
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .seg-pill.active .seg-count {
+      background: var(--brand-blue-soft);
+      color: var(--brand-blue);
+    }
+
+    .search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 290px;
+    }
+
+    .search-box .j-icon {
+      position: absolute;
+      left: 10px;
+      width: 14px;
+      height: 14px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 32px;
+      padding: 0 10px 0 32px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      font-size: 12.5px;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--brand-blue);
+      box-shadow: 0 0 0 2px var(--brand-blue-soft);
+    }
+
+    .select-filter {
+      height: 32px;
+      padding: 0 26px 0 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 8px center;
+      font-size: 12.5px;
+      color: var(--text-main);
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .select-filter:focus {
+      border-color: var(--brand-blue);
+    }
+
+    /* ============================================================
+       TABELA ENTERPRISE · FLUIDA E COM DISTINÇÃO CLARA
+    ============================================================ */
+    .table-container {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      width: 100%;
+    }
+
+    .studio-table {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+      font-size: 12.5px;
+    }
+
+    .studio-table th {
+      background: #f8fafc;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .studio-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      vertical-align: middle;
+      line-height: 1.4;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: background-color 0.16s ease;
+    }
+
+    .studio-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .studio-table tbody tr {
+      transition: transform 0.15s var(--ease-apple), box-shadow 0.15s var(--ease-apple), background-color 0.15s ease;
+      position: relative;
+    }
+
+    .studio-table tbody tr:hover td {
+      background-color: #fcfdfe;
+    }
+
+    /* ============================================================
+       DISTINÇÃO VISUAL CLARA: CITAÇÃO VS AUDIÊNCIA
+    ============================================================ */
+    .row-citacao {
+      border-left: 3.5px solid var(--cit-accent);
+    }
+
+    .row-audiencia {
+      border-left: 3.5px solid var(--aud-accent);
+      background-color: #fafcff;
+    }
+
+    .badge-tipo {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 3px 8px;
+      border-radius: 5px;
+      margin-right: 6px;
+    }
+
+    .badge-citacao {
+      background: var(--cit-badge-bg);
+      color: var(--cit-badge-text);
+      border: 1px solid var(--cit-badge-border);
+    }
+
+    .badge-audiencia {
+      background: var(--aud-badge-bg);
+      color: var(--aud-badge-text);
+      border: 1px solid var(--aud-badge-border);
+    }
+
+    /* CALENDAR CHIP PARA AUDIÊNCIAS */
+    .calendar-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ffffff;
+      border: 1px solid var(--brand-blue-border);
+      border-radius: 6px;
+      padding: 3px 7px;
+      box-shadow: 0 1px 2px rgba(15, 76, 217, 0.05);
+    }
+
+    .cal-chip-date {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--brand-blue);
+      letter-spacing: -0.01em;
+    }
+
+    .cal-chip-time {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-left: 1px solid var(--border-color);
+      padding-left: 5px;
+    }
+
+    .subtext-indicativo {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Larguras exatas da Central Unificada */
+    .col-uni-cnj { width: 20%; }
+    .col-uni-cli { width: 17%; }
+    .col-uni-tipo { width: 19%; }
+    .col-uni-data { width: 14%; }
+    .col-uni-local { width: 14%; }
+    .col-uni-val { width: 8%; }
+    .col-uni-act { width: 8%; text-align: right; }
+
+    /* Larguras Relatórios */
+    .col-rel-data { width: 15%; }
+    .col-rel-sol { width: 15%; }
+    .col-rel-tipo { width: 18%; }
+    .col-rel-stat { width: 14%; }
+    .col-rel-itens { width: 10%; }
+    .col-rel-arq { width: 20%; }
+    .col-rel-act { width: 8%; text-align: right; }
+
+    /* Larguras Cadastros */
+    .col-cad-cnj { width: 23%; }
+    .col-cad-cli { width: 18%; }
+    .col-cad-polo { width: 11%; }
+    .col-cad-ctrl { width: 13%; }
+    .col-cad-modo { width: 13%; }
+    .col-cad-escopo { width: 10%; }
+    .col-cad-act { width: 12%; text-align: right; }
+
+    /* Larguras Monitoramento */
+    .col-mon-cnj { width: 22%; }
+    .col-mon-cli { width: 16%; }
+    .col-mon-trib { width: 16%; }
+    .col-mon-modo { width: 13%; }
+    .col-mon-cit { width: 8%; }
+    .col-mon-aud { width: 8%; }
+    .col-mon-stat { width: 8%; }
+    .col-mon-act { width: 9%; text-align: right; }
+
+    /* CNJ styling */
+    .cnj-cell {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .copy-btn {
+      opacity: 0;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 2px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.15s ease, color 0.15s ease, transform 0.15s ease;
+    }
+
+    tr:hover .copy-btn {
+      opacity: 1;
+    }
+
+    .copy-btn:hover {
+      color: var(--brand-blue);
+      background: var(--brand-blue-soft);
+      transform: scale(1.1);
+    }
+
+    /* QUIET LUXURY TAGS */
+    .tag-quiet {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+
+    .tag-forte {
+      background: var(--tag-forte-bg);
+      color: var(--tag-forte-text);
+      border-color: var(--tag-forte-border);
+    }
+
+    .tag-medio {
+      background: var(--tag-medio-bg);
+      color: var(--tag-medio-text);
+      border-color: var(--tag-medio-border);
+    }
+
+    .tag-fraco {
+      background: var(--tag-fraco-bg);
+      color: var(--tag-fraco-text);
+      border-color: var(--tag-fraco-border);
+    }
+
+    .tag-designada {
+      background: var(--tag-designada-bg);
+      color: var(--tag-designada-text);
+      border-color: var(--tag-designada-border);
+    }
+
+    .tag-realizada {
+      background: var(--tag-realizada-bg);
+      color: var(--tag-realizada-text);
+      border-color: var(--tag-realizada-border);
+    }
+
+    .tag-pendente {
+      background: var(--tag-pendente-bg);
+      color: var(--tag-pendente-text);
+      border-color: var(--tag-pendente-border);
+    }
+
+    .tag-aprovada {
+      background: var(--tag-aprovada-bg);
+      color: var(--tag-aprovada-text);
+      border-color: var(--tag-aprovada-border);
+    }
+
+    .tag-rejeitada {
+      background: var(--tag-rejeitada-bg);
+      color: var(--tag-rejeitada-text);
+      border-color: var(--tag-rejeitada-border);
+    }
+
+    .tag-finalizado {
+      background: #f0fdf4;
+      color: #166534;
+      border-color: #bbf7d0;
+    }
+
+    .tag-processando {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+
+    .tag-scope {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+      margin-right: 3px;
+    }
+
+    .tardia-indicator {
+      color: var(--text-muted);
+      font-size: 11px;
+      font-style: normal;
+      margin-left: 4px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-muted);
+    }
+
+    /* Progress bar em relatórios assíncronos */
+    .async-progress-bar {
+      width: 100px;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .async-progress-fill {
+      height: 100%;
+      background: var(--brand-blue);
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    /* ============================================================
+       SLIDE-OVER DRAWER COM BACKDROP BLUR & APPLE SPRING
+    ============================================================ */
+    .drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.28);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.24s var(--ease-apple);
+    }
+
+    .drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 560px;
+      max-width: 90vw;
+      background: #ffffff;
+      box-shadow: -8px 0 32px rgba(0, 0, 0, 0.12);
+      z-index: 101;
+      transform: translateX(100%);
+      transition: transform 0.3s var(--ease-apple);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drawer-overlay.open .drawer-panel {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .drawer-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .drawer-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.16s ease;
+    }
+
+    .drawer-close:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+      transform: scale(1.08);
+    }
+
+    .drawer-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      padding: 0 24px;
+      background: #f8fafc;
+    }
+
+    .drawer-tab {
+      padding: 11px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.18s var(--ease-apple);
+    }
+
+    .drawer-tab.active {
+      color: var(--brand-blue);
+      border-bottom-color: var(--brand-blue);
+      background: #ffffff;
+    }
+
+    .drawer-body {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .drawer-tab-content {
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .drawer-tab-content.active {
+      display: block;
+    }
+
+    .meta-property-row {
+      display: flex;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 13px;
+    }
+
+    .meta-prop-label {
+      width: 140px;
+      font-weight: 600;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .meta-prop-value {
+      flex: 1;
+      color: var(--text-main);
+    }
+
+    .text-box-andamento {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-main);
+      white-space: pre-wrap;
+      font-family: inherit;
+    }
+
+    .drawer-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-color);
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* ============================================================
+       MODALS COM ENTRADA FLUIDA (APPLE DIALOG)
+    ============================================================ */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.35);
+      backdrop-filter: blur(5px);
+      z-index: 120;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.24s var(--ease-apple);
+      padding: 20px;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 620px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: scale(0.95) translateY(8px);
+      transition: transform 0.26s var(--ease-spring);
+    }
+
+    .modal-backdrop.open .modal-card {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-card-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-card-title {
+      font-size: 16.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .modal-card-body {
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .modal-card-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-color);
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .form-label .required {
+      color: #dc2626;
+      margin-left: 2px;
+    }
+
+    .form-input {
+      width: 100%;
+      height: 38px;
+      padding: 0 12px;
+      border-radius: 7px;
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      font-size: 13px;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .form-input:focus {
+      border-color: var(--brand-blue);
+      box-shadow: 0 0 0 2px var(--brand-blue-soft);
+    }
+
+    .mode-selector-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .mode-card {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      background: #ffffff;
+      transition: all 0.18s var(--ease-apple);
+    }
+
+    .mode-card:hover {
+      border-color: var(--border-hover);
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
+    .mode-card.active {
+      border-color: var(--brand-blue);
+      background: var(--brand-blue-soft);
+      box-shadow: 0 1px 3px rgba(15, 76, 217, 0.1);
+    }
+
+    .mode-card-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .mode-card.active .mode-card-title {
+      color: var(--brand-blue);
+    }
+
+    .mode-card-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    .scope-cards-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .scope-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.18s var(--ease-apple);
+    }
+
+    .scope-card:hover {
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
+    .scope-card input[type="checkbox"], .scope-card input[type="radio"] {
+      margin-top: 2px;
+      accent-color: var(--brand-blue);
+      width: 15px;
+      height: 15px;
+    }
+
+    .scope-card-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .scope-card-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .wizard-steps {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      background: #f8fafc;
+      padding: 12px 24px;
+      gap: 24px;
+    }
+
+    .w-step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .w-step.active {
+      color: var(--brand-blue);
+    }
+
+    .w-step.done {
+      color: #166534;
+    }
+
+    .w-step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .w-step.active .w-step-num {
+      background: var(--brand-blue);
+      color: #ffffff;
+    }
+
+    .w-step.done .w-step-num {
+      background: #bbf7d0;
+      color: #166534;
+    }
+
+    .dropzone-area {
+      border: 2px dashed var(--border-color);
+      border-radius: 10px;
+      padding: 36px 20px;
+      text-align: center;
+      background: #fafbfc;
+      cursor: pointer;
+      transition: all 0.18s var(--ease-apple);
+    }
+
+    .dropzone-area:hover {
+      border-color: var(--brand-blue);
+      background: var(--brand-blue-soft);
+      transform: scale(1.01);
+    }
+
+    /* Toast */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: toastIn 0.26s var(--ease-spring);
+      pointer-events: auto;
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(14px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes rowPulse {
+      0% { background-color: #dbeafe; }
+      100% { background-color: transparent; }
+    }
+
+    .row-new {
+      animation: rowPulse 2.5s ease-out;
+    }
+  
+    /* ============================================================
+       SUB-HEADER TABS · ESTILO LINEAR / APPLE (OPÇÃO 1)
+    ============================================================ */
+    .stream-nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      border-bottom: 1px solid var(--border-color);
+      margin-top: 24px;
+      margin-bottom: 18px;
+      padding-left: 2px;
+    }
+
+    .stream-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 12px 4px 14px 4px;
+      background: transparent;
+      border: none;
+      border-bottom: 2.5px solid transparent;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      margin-bottom: -1px;
+    }
+
+    .stream-tab:hover {
+      color: var(--text-main);
+    }
+
+    .stream-tab.active {
+      color: var(--text-main);
+      border-bottom-color: var(--brand-blue);
+      font-weight: 700;
+    }
+
+    .stream-tab.stream-tab-cit.active {
+      color: #065f46;
+      border-bottom-color: var(--cit-accent);
+    }
+
+    .stream-tab.stream-tab-aud.active {
+      color: #1e40af;
+      border-bottom-color: var(--aud-accent);
+    }
+
+    .stream-tab-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      background: var(--surface-subtle);
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+    }
+
+    .stream-tab.active .stream-tab-badge {
+      background: var(--brand-blue-soft);
+      color: var(--brand-blue);
+    }
+
+    .stream-tab.stream-tab-cit.active .stream-tab-badge {
+      background: #ecfdf5;
+      color: #047857;
+    }
+
+    .stream-tab.stream-tab-aud.active .stream-tab-badge {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    /* Larguras Harmonizadas da Tabela sem Validação CRM (Ações Nunca Quebra) */
+    .col-uni-cnj { width: 22%; }
+    .col-uni-cli { width: 19%; }
+    .col-uni-tipo { width: 20%; }
+    .col-uni-data { width: 14%; }
+    .col-uni-local { width: 11%; }
+    .col-uni-act { width: 14%; min-width: 145px; text-align: right; }
+
+    .col-cit-cnj { width: 22%; }
+    .col-cit-cli { width: 19%; }
+    .col-cit-forca { width: 18%; }
+    .col-cit-mov { width: 14%; }
+    .col-cit-cons { width: 13%; }
+    .col-cit-act { width: 14%; min-width: 145px; text-align: right; }
+
+    .col-aud-cnj { width: 22%; }
+    .col-aud-cli { width: 19%; }
+    .col-aud-data { width: 16%; }
+    .col-aud-local { width: 16%; }
+    .col-aud-tipo { width: 13%; }
+    .col-aud-act { width: 14%; min-width: 145px; text-align: right; }
+
+    .studio-table td.col-uni-act,
+    .studio-table td.col-cit-act,
+    .studio-table td.col-aud-act {
+      overflow: visible;
+      white-space: nowrap;
+      padding-right: 18px;
+    }
+
+    .status-badge-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 5px;
+      margin-right: 6px;
+    }
+    .status-badge-inline.validado {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+    .status-badge-inline.descartado {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+  
+    /* ============================================================
+       DESTAQUE VISUAL SUTIL E REFINADO · GESTÃO DE PROCESSOS
+       - Badges refinados de Modo de Operação
+       - Cápsulas de Indicativos (CAPA, CIT, AUD, HAB) padrão Jurify
+       - Botão Ver harmonizado em todas as tabelas
+    ============================================================ */
+    .badge-modo {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .modo-consulta-mon {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+    .modo-so-mon {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+    .modo-unica {
+      background: #f8fafc;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Cápsulas de Indicativos (CAPA, CIT, AUD, HAB) */
+    .indicativos-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .ind-pill {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 5.5px;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: all 0.15s ease;
+      cursor: default;
+      user-select: none;
+    }
+    .ind-pill-capa {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+    }
+    .ind-pill-cit {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+    .ind-pill-aud {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+    .ind-pill-hab {
+      background: #f5f3ff;
+      color: #6d28d9;
+      border: 1px solid #ddd6fe;
+    }
+    .ind-pill-off {
+      background: #f8fafc;
+      color: #94a3b8;
+      border: 1px solid #e2e8f0;
+      opacity: 0.65;
+    }
+
+    /* Larguras Cadastros com Ações */
+    .col-cad-cnj { width: 22%; }
+    .col-cad-cli { width: 17%; }
+    .col-cad-polo { width: 8%; }
+    .col-cad-ctrl { width: 12%; }
+    .col-cad-modo { width: 13%; }
+    .col-cad-escopo { width: 11%; }
+    .col-cad-data { width: 8%; }
+    .col-cad-act { width: 9%; min-width: 90px; text-align: right; }
+
+    /* Larguras Monitoramento com Ações */
+    .col-mon-cnj { width: 21%; }
+    .col-mon-cli { width: 16%; }
+    .col-mon-trib { width: 12%; }
+    .col-mon-modo { width: 13%; }
+    .col-mon-cit { width: 8%; text-align: center; }
+    .col-mon-aud { width: 8%; text-align: center; }
+    .col-mon-stat { width: 7%; }
+    .col-mon-varredura { width: 9%; }
+    .col-mon-act { width: 6%; min-width: 80px; text-align: right; }
+
+    /* Refinamento dos Cards do Modal de Cadastro */
+    .mode-card.mode-card-consulta-mon.active {
+      border-color: #2563eb;
+      background: #f8faff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+    }
+    .mode-card.mode-card-so-mon.active {
+      border-color: #059669;
+      background: #f6fdf9;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.14);
+    }
+    .mode-card.mode-card-consulta-unica.active {
+      border-color: #475569;
+      background: #f8fafc;
+      box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.12);
+    }
+
+    .scope-card.scope-cit.has-checked {
+      border-color: #10b981;
+      background: #f0fdf4;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.12);
+    }
+    .scope-card.scope-aud.has-checked {
+      border-color: #3b82f6;
+      background: #eff6ff;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+    }
+    .scope-card.scope-capa.has-checked {
+      border-color: #0284c7;
+      background: #f0f9ff;
+      box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.12);
+    }
+    .scope-card.scope-hab.has-checked {
+      border-color: #8b5cf6;
+      background: #f5f3ff;
+      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.12);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       SVG SPRITE OFICIAL JURIFY (EMBUTIDO NATIVO)
+  ======================================================== -->
+  <div style="display: none;">
+    <svg xmlns="http://www.w3.org/2000/svg"><defs><symbol id="central-indicativos" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18M7 13h4m-4 3h7"/><circle cx="17" cy="14" r="1"/></symbol><symbol id="cadastros" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3"/><path d="M8 3h7l4 4v6H8zM15 3v4h4M11 10h5M7 16h5"/></symbol><symbol id="novo-processo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6M13 3v5h5l-5-5M18 13v8m-4-4h8"/></symbol><symbol id="monitoramento" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol><symbol id="lote-diario" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="16" height="16" rx="3"/><path d="M2 7v12a3 3 0 0 0 3 3h12M9 8h8M9 12h5"/></symbol><symbol id="citacao" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6ZM14 3v6h6M8 13h8M8 17h5"/></symbol><symbol id="audiencia" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 10h18"/><circle cx="9" cy="15" r="1.5"/><path d="M13 14h4m-4 3h3"/></symbol><symbol id="data-ato" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 10h18M8 14h3v3H8z"/></symbol><symbol id="data-consumo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4zM8 2v6m-3-3 3 3 3-3M8 13h8m-8 3h5"/></symbol><symbol id="historico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11a9 9 0 1 1 2.6 7.4M3 5v6h6M12 7v5l3 2"/></symbol><symbol id="feedback-pendente" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11V6a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v11l4-3h5"/><circle cx="17" cy="17" r="5"/><path d="M17 14v3l2 1"/></symbol><symbol id="feedback-valido" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11V6a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v12l4-3h7M15 18l2 2 5-5"/></symbol><symbol id="feedback-invalido" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11V6a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v12l4-3h6M16 16l5 5m0-5-5 5"/></symbol><symbol id="conferencia-crm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="17" rx="3"/><path d="M9 4V2h6v2M8 10l1.5 1.5L12 9m2 2h2M8 16l1.5 1.5L12 15m2 2h2"/></symbol><symbol id="ver-evidencia" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7M12 3v5h5M12 3l5 5M6 12h4m-4 4h3"/><circle cx="16" cy="15" r="4"/><path d="m19 18 3 3"/></symbol><symbol id="importar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m-4-4 4 4 4-4M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></symbol><symbol id="exportar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m-4 4 4-4 4 4M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></symbol><symbol id="buscar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol><symbol id="filtros" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="8" cy="6" r="2" fill="var(--icon-surface,white)"/><circle cx="16" cy="12" r="2" fill="var(--icon-surface,white)"/><circle cx="10" cy="18" r="2" fill="var(--icon-surface,white)"/></symbol><symbol id="carteiras" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="14" rx="3"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12a24 24 0 0 0 18 0M10 14h4"/></symbol><symbol id="logs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14v18H5zM8 7h2m3 0h3M8 12h2m3 0h3M8 17h2m3 0h3"/></symbol><symbol id="configuracoes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/><rect x="7" y="4" width="4" height="4" rx="1" fill="var(--icon-surface,white)"/><rect x="14" y="10" width="4" height="4" rx="1" fill="var(--icon-surface,white)"/><rect x="7" y="16" width="4" height="4" rx="1" fill="var(--icon-surface,white)"/></symbol><symbol id="copiar-cnj" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol><symbol id="alerta-dados" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 10 17H2L12 3ZM12 9v5m0 3h.01"/></symbol></defs></svg>
+  </div>
+
+  <!-- ========================================================
+       SIDEBAR RETRÁTIL
+  ======================================================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-group">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAC3UlEQVR4AcRWTUhUURT+zlVLtEGlepNKmza6s59NSUWLfmaCWqZugn4oJQqUyqCibWNSSi0yahkF7ZVoExVtWjSbJDIyakZSKxcGSY5zu99z3jijwpv3lDePOfPOPeee7/vm3HfvPIVFVzia2GlFEgNWJPkqHEn+DEeTekVmMIhlRRL3wwZ7ER0WBOzT5VY0GdOQNyJyRgR7IFi/uMDz2GAQS0TOEjscTd7EDl3m4NgCrEOJJqt8LC7AZWMlTnK17xnsbmtj8h05iW8LECVtImhgIAgTkSZykktZB5PNGrjEQZBGTnZBQenjpjV2J4IUYHMKOpQItqJIl+FuVFqjsUj80JBG0wGpKpYAswxh17X/MVgHx/o6q1219ndVZ+ezzq3AVUAuQOuBCuzdtjY3lOcz17K/Ii/mNvAkgGD9nTUoX0Mv3xhjLj/qPvIsoHaDwtUTSx+bayerwJw7Zf4MzwJYfvpoJbY3ZI9z2z91pJIpz+ZLgNm/uHexBmWlsI0+Y57ZTYEyVvBn8O0MUnPz07fUl6KzNYSuthDoM8oc59Av1DwJGB6dxZ0n01ns88dCuNASyo5vmxznZAMFOJ4EmFMTfU+n8elbyobmEpRkED58mUW/ydkJD1+Z8sIquM5zaaA99ju7FKxk69tjU2COYy/mSYADPDyasjvhjLksI9/nu+LECr37EkBwknIp2HouC2N+zLcAtrujZwrnev213hHrWwAB+Os/fvXXetbTXAVsOjwGx3ofL2xBFi9nnOPM5325ObkxpYHx3ECQPrmVeS2JB0max6URN29EKJoAc67EVTqVfgTofwj4Mqfqn3S67KGafLF5JK3VjYD5ISLXJ59bn+1dMBmqvWUeiPdBiTBc8fF1tXfJZwvAM5mb+FvXbAIxk8z84ZrRKn+IbazHcO0iJ+HnBdB7KTPjQ/VXBHq31npAa7w2O+QXUysxYhDLYD4g9sRQfTcMFzLXfwAAAP//6fyCigAAAAZJREFUAwA+0BCnKW/11gAAAABJRU5ErkJggg==" class="brand-icon-img" alt="Jurify Monitor" style="width: 28px; height: 28px; border-radius: 7px; object-fit: contain; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">
+        <span class="brand-name">Jurify Monitor</span>
+      </div>
+      <button class="collapse-toggle-btn" onclick="toggleSidebar()" title="Recolher/Expandir Menu">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor">
+          <polyline points="10 4 6 8 10 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <ul class="sidebar-nav">
+      <div class="sidebar-section-title">Comando Operacional</div>
+      
+      <li class="sidebar-item active" id="nav-central">
+        <a onclick="showView('central')" title="Central de Indicativos (Citações & Audiências)">
+          <svg class="j-icon"><use href="#central-indicativos"/></svg>
+          <span class="sidebar-item-label">Central de Indicativos</span>
+          <span class="nav-badge" id="badgeNavCentral">43</span>
+        </a>
+      </li>
+
+      <div class="sidebar-section-title">Gestão de Processos</div>
+
+      <li class="sidebar-item" id="nav-cadastros">
+        <a onclick="showView('cadastros')" title="Processos Cadastrados">
+          <svg class="j-icon"><use href="#cadastros"/></svg>
+          <span class="sidebar-item-label">Cadastros</span>
+          <span class="nav-badge">97k</span>
+        </a>
+      </li>
+
+      <li class="sidebar-item" id="nav-monitoramento">
+        <a onclick="showView('monitoramento')" title="Processos em Monitoramento Ativo">
+          <svg class="j-icon"><use href="#monitoramento"/></svg>
+          <span class="sidebar-item-label">Monitoramento</span>
+          <span class="nav-badge" id="badgeNavMon">19.355</span>
+        </a>
+      </li>
+
+      <div class="sidebar-section-title">Exportações & Auditoria</div>
+
+      <li class="sidebar-item" id="nav-relatorios">
+        <a onclick="showView('relatorios')" title="Relatórios e Fila Assíncrona">
+          <svg class="j-icon"><use href="#lote-diario"/></svg>
+          <span class="sidebar-item-label">Relatórios</span>
+          <span class="nav-badge" id="badgeNavRel" style="background: #eff6ff; color: var(--brand-blue); border-color: var(--brand-blue-border);">1</span>
+        </a>
+      </li>
+
+      <li class="sidebar-item" id="nav-logs">
+        <a onclick="showView('logs')" title="Logs de Execução">
+          <svg class="j-icon"><use href="#logs"/></svg>
+          <span class="sidebar-item-label">Logs</span>
+        </a>
+      </li>
+
+      <li class="sidebar-item" id="nav-config">
+        <a onclick="showView('config')" title="Configurações">
+          <svg class="j-icon"><use href="#configuracoes"/></svg>
+          <span class="sidebar-item-label">Configurações</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <div class="user-info-row">
+        <div class="user-avatar">LF</div>
+        <div class="user-details">
+          <span class="user-name">Lucas Ferreira</span>
+          <span class="user-email">lucas.ferreira@jurify.com.br</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================
+       MAIN WRAPPER
+  ======================================================== -->
+  <main class="main-wrapper">
+    <div class="content-area">
+
+      <!-- ====================================================
+           1. VIEW: CENTRAL CONSOLIDADA DE INDICATIVOS
+      ==================================================== -->
+      <section class="app-section active" id="view-central">
+        
+        <div class="top-header">
+          <div>
+            <div class="eyebrow">FEED DIÁRIO CONSOLIDADO</div>
+            <h1 class="page-title">Central de Indicativos</h1>
+            <p class="page-desc">
+              Visão consolidada de alta eficiência: triagem imediata de citações judiciais e audiências designadas identificadas pelos robôs da Jurify nos tribunais.
+            </p>
+          </div>
+          <div class="top-actions">
+            <button class="btn btn-secondary" onclick="abrirModalImportar()">
+              <svg class="j-icon j-icon-sm"><use href="#importar"/></svg>
+              Importar planilha
+            </button>
+            <button class="btn btn-primary" onclick="abrirModalExportAssincrono()">
+              <svg class="j-icon j-icon-sm"><use href="#exportar"/></svg>
+              Solicitar Exportação
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 KPI Cards: CARD DE PENDENTES DE TRIAGEM -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">TOTAL NO LOTE</div>
+            <div class="stat-number" id="kpiFeedTotal">43</div>
+            <div class="stat-subtitle">Indicativos identificados hoje</div>
+          </div>
+          <div class="stat-card" style="border-left: 3.5px solid var(--cit-accent);">
+            <div class="stat-header">CITAÇÕES DO DIA</div>
+            <div class="stat-number" id="kpiFeedCitacoes" style="color: #065f46;">28</div>
+            <div class="stat-subtitle">10 fortes · 18 médias/fracas</div>
+          </div>
+          <div class="stat-card" style="border-left: 3.5px solid var(--aud-accent);">
+            <div class="stat-header">AUDIÊNCIAS</div>
+            <div class="stat-number" id="kpiFeedAudiencias" style="color: var(--brand-blue);">15</div>
+            <div class="stat-subtitle">11 designadas · 4 realizadas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">PENDENTES DE TRIAGEM</div>
+            <div class="stat-number" id="kpiFeedPendentes" style="color: #b45309;">43</div>
+            <div class="stat-subtitle">Aguardando conferência da equipe</div>
+          </div>
+        </div>
+
+        <!-- SUB-HEADER TABS (OPÇÃO 1: NÍVEL LINEAR / APPLE) -->
+        <div class="stream-nav-tabs">
+          <button class="stream-tab active" onclick="switchStreamTab('TODOS')" id="streamTab-TODOS">
+            <svg class="j-icon j-icon-sm"><use href="#lote-diario"/></svg>
+            <span>Lote Consolidado</span>
+            <span class="stream-tab-badge" id="badge-stream-todos">43</span>
+          </button>
+          <button class="stream-tab stream-tab-cit" onclick="switchStreamTab('CITACAO')" id="streamTab-CITACAO">
+            <svg class="j-icon j-icon-sm" style="color: var(--cit-accent);"><use href="#citacao"/></svg>
+            <span>Citações Judiciais</span>
+            <span class="stream-tab-badge badge-cit" id="badge-stream-cit">28</span>
+          </button>
+          <button class="stream-tab stream-tab-aud" onclick="switchStreamTab('AUDIENCIA')" id="streamTab-AUDIENCIA">
+            <svg class="j-icon j-icon-sm" style="color: var(--aud-accent);"><use href="#audiencia"/></svg>
+            <span>Audiências Designadas</span>
+            <span class="stream-tab-badge badge-aud" id="badge-stream-aud">15</span>
+          </button>
+        </div>
+
+        <!-- Toolbar com Filtro de Fase e Busca -->
+        <div class="toolbar-bar" style="margin-top: 0;">
+          <div class="segmented-tabs">
+            <button class="seg-pill active" onclick="setStatusFilter('ALL')" id="seg-status-ALL">
+              Todos <span class="seg-count" id="count-status-all">43</span>
+            </button>
+            <button class="seg-pill" onclick="setStatusFilter('PENDENTE')" id="seg-status-PENDENTE">
+              <span class="chip-dot dot-pendente" style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#f59e0b; margin-right:3px;"></span>
+              Pendentes <span class="seg-count" id="count-status-pend">41</span>
+            </button>
+            <button class="seg-pill" onclick="setStatusFilter('VALIDADOS')" id="seg-status-VALIDADOS">
+              <svg class="j-icon j-icon-xs" style="color: #166534; margin-right:2px;"><use href="#feedback-valido"/></svg>
+              Validados <span class="seg-count" id="count-status-val">2</span>
+            </button>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="search-box">
+              <svg class="j-icon"><use href="#buscar"/></svg>
+              <input type="text" class="search-input" id="searchFeed" placeholder="Buscar por CNJ, cliente ou texto..." oninput="renderFeedConsolidado()">
+            </div>
+            <select class="select-filter" id="filterClienteFeed" onchange="renderFeedConsolidado()">
+              <option value="">Todas as Carteiras</option>
+              <option value="ENTER VOLKSWAGEN">Enter Volkswagen</option>
+              <option value="ENTER BMG">Enter BMG</option>
+              <option value="SANTANDER BRASIL">Santander Brasil</option>
+              <option value="BANCO PAN">Banco Pan</option>
+              <option value="CLARO BRASIL">Claro Brasil</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tabela Adaptativa Harmoniosa sem Validação CRM -->
+        <div class="table-container">
+          <table class="studio-table">
+            <thead id="theadFeedConsolidado">
+              <!-- Renderizado dinamicamente por aba sem quebra de ações -->
+            </thead>
+            <tbody id="tbodyFeedConsolidado">
+              <!-- Inserido dinamicamente via JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+      <!-- ====================================================
+           2. VIEW: RELATÓRIOS & EXPORTAÇÕES ASSÍNCRONAS
+      ==================================================== -->
+      <section class="app-section" id="view-relatorios">
+        
+        <div class="top-header">
+          <div>
+            <div class="eyebrow">EXPORTAÇÕES ASSÍNCRONAS EM BACKGROUND</div>
+            <h1 class="page-title">Relatórios</h1>
+            <p class="page-desc">
+              Fila de processamento assíncrono para extração de grandes volumes de citações e audiências. As solicitações são processadas pelos robôs em segundo plano e disponibilizadas para download assim que concluídas.
+            </p>
+          </div>
+          <div class="top-actions">
+            <button class="btn btn-secondary" onclick="atualizarFilaRelatorios()">
+              <svg class="j-icon j-icon-sm"><use href="#historico"/></svg>
+              Atualizar
+            </button>
+            <button class="btn btn-primary" onclick="abrirModalExportAssincrono()">
+              <svg class="j-icon j-icon-sm"><use href="#exportar"/></svg>
+              Solicitar Novo Relatório
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 KPI Cards Relatórios -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">RELATÓRIOS DISPONÍVEIS</div>
+            <div class="stat-number">10</div>
+            <div class="stat-subtitle">Prontos para download</div>
+          </div>
+          <div class="stat-card" style="border-left: 3.5px solid var(--brand-blue);">
+            <div class="stat-header">EM PROCESSAMENTO</div>
+            <div class="stat-number" id="kpiRelProcessando" style="color: var(--brand-blue);">1</div>
+            <div class="stat-subtitle">Fila ativa em segundo plano</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">ITENS PROCESSADOS</div>
+            <div class="stat-number">173.230</div>
+            <div class="stat-subtitle">Registros exportados no mês</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">TEMPO MÉDIO DE FILA</div>
+            <div class="stat-number" style="font-size: 20px; color: var(--text-main);">~ 1.8 min</div>
+            <div class="stat-subtitle">Execução assíncrona</div>
+          </div>
+        </div>
+
+        <!-- Toolbar Filtros Relatórios -->
+        <div class="toolbar-bar">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <select class="select-filter" id="filterPeriodoRel" onchange="renderRelatorios()">
+              <option value="">Período: Todo o histórico</option>
+              <option value="7d">Últimos 7 dias</option>
+              <option value="30d">Últimos 30 dias</option>
+            </select>
+
+            <select class="select-filter" id="filterTipoRel" onchange="renderRelatorios()">
+              <option value="">Tipo: Todos</option>
+              <option value="Citações">Citações</option>
+              <option value="Audiências">Audiências</option>
+              <option value="Consolidado">Consolidado</option>
+            </select>
+
+            <select class="select-filter" id="filterStatusRel" onchange="renderRelatorios()">
+              <option value="">Status: Todos</option>
+              <option value="Finalizado">Finalizado</option>
+              <option value="Processando">Processando</option>
+            </select>
+          </div>
+
+          <button class="btn btn-secondary btn-sm" onclick="limparFiltrosRelatorios()">
+            Limpar Filtros
+          </button>
+        </div>
+
+        <!-- Tabela Fluida de Relatórios -->
+        <div class="table-container">
+          <table class="studio-table">
+            <thead>
+              <tr>
+                <th class="col-rel-data">Data da Solicitação</th>
+                <th class="col-rel-sol">Solicitante</th>
+                <th class="col-rel-tipo">Tipo</th>
+                <th class="col-rel-stat">Status</th>
+                <th class="col-rel-itens">Itens</th>
+                <th class="col-rel-arq">Arquivo Gerado</th>
+                <th class="col-rel-act">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyRelatorios">
+              <!-- Inserido dinamicamente via JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+      <!-- ====================================================
+           3. VIEW: PROCESSOS CADASTRADOS
+      ==================================================== -->
+      <section class="app-section" id="view-cadastros">
+        
+        <div class="top-header">
+          <div>
+            <div class="eyebrow">GESTÃO DA BASE</div>
+            <h1 class="page-title">Processos Cadastrados</h1>
+            <p class="page-desc">
+              Base de processos cadastrados. Ao registrar ou importar novos processos, eles entram imediatamente na esteira de monitoramento contínuo.
+            </p>
+          </div>
+          <div class="top-actions">
+            <button class="btn btn-secondary" onclick="abrirModalImportar()">
+              <svg class="j-icon j-icon-sm"><use href="#importar"/></svg>
+              Importar Processos
+            </button>
+            <button class="btn btn-primary" onclick="abrirModalRegistrar()">
+              <svg class="j-icon j-icon-sm"><use href="#novo-processo"/></svg>
+              Registrar Processo
+            </button>
+          </div>
+        </div>
+
+        <!-- Stats Cadastros -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">TOTAL DE PROCESSOS</div>
+            <div class="stat-number">97.477</div>
+            <div class="stat-subtitle">Cadastrados na base global</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">MONITORANDO ATIVO</div>
+            <div class="stat-number" id="kpiCadMonAtivo" style="color: #166534;">19.355</div>
+            <div class="stat-subtitle">Sob vigilância contínua</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">CADASTROS RECENTES</div>
+            <div class="stat-number" style="color: var(--brand-blue);">+42</div>
+            <div class="stat-subtitle">Inseridos nas últimas 24h</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">CARTEIRAS ATIVAS</div>
+            <div class="stat-number">18</div>
+            <div class="stat-subtitle">Clientes corporativos</div>
+          </div>
+        </div>
+
+        <!-- Toolbar Cadastros -->
+        <div class="toolbar-bar">
+          <div class="search-box" style="width: 320px;">
+            <svg class="j-icon"><use href="#buscar"/></svg>
+            <input type="text" class="search-input" id="searchCadastros" placeholder="Buscar por CNJ, cliente ou controle..." oninput="renderCadastros()">
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <select class="select-filter" id="filterModoCadastro" onchange="renderCadastros()">
+              <option value="">Modo: Todos</option>
+              <option value="Consulta + Mon">Consulta + Monitorar</option>
+              <option value="Só Monitorar">Só Monitorar</option>
+              <option value="Consulta Única">Consulta Única</option>
+            </select>
+
+            <select class="select-filter" id="filterPoloCadastro" onchange="renderCadastros()">
+              <option value="">Pólo: Todos</option>
+              <option value="Réu">Réu</option>
+              <option value="Autor">Autor</option>
+              <option value="Terceiro Interessado">Terceiro Interessado</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tabela Fluida de Cadastros -->
+        <div class="table-container">
+          <table class="studio-table">
+            <thead>
+              <tr>
+                <th class="col-cad-cnj">Número do Processo</th>
+                <th class="col-cad-cli">Cliente / Carteira</th>
+                <th class="col-cad-polo">Pólo</th>
+                <th class="col-cad-ctrl">Controle</th>
+                <th class="col-cad-modo">Modo</th>
+                <th class="col-cad-escopo">Indicativos</th>
+                <th class="col-cad-data">Inserção</th>
+                <th class="col-cad-act" style="text-align: right;">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyCadastros">
+              <!-- Inserido dinamicamente via JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+      <!-- ====================================================
+           4. VIEW: PROCESSOS EM MONITORAMENTO ATIVO
+      ==================================================== -->
+      <section class="app-section" id="view-monitoramento">
+        
+        <div class="top-header">
+          <div>
+            <div class="eyebrow">ESTEIRA DE VIGILÂNCIA CONTÍNUA</div>
+            <h1 class="page-title">Processos em Monitoramento</h1>
+            <p class="page-desc">
+              Esteira contínua de vigilância automática de citações e audiências nos diários e sistemas processuais (PJe, Projudi, e-SAJ, Eproc).
+            </p>
+          </div>
+          <div class="top-actions">
+            <button class="btn btn-secondary" onclick="showToast('Verificando conexão com 92 tribunais...')">
+              <svg class="j-icon j-icon-sm"><use href="#historico"/></svg>
+              Status dos Robôs
+            </button>
+            <button class="btn btn-primary" onclick="showView('central')">
+              Ver Central de Indicativos
+            </button>
+          </div>
+        </div>
+
+        <!-- Stats Monitoramento -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">PROCESSOS ATIVOS</div>
+            <div class="stat-number" id="kpiMonAtivos" style="color: #166534;">19.355</div>
+            <div class="stat-subtitle">Varredura periódica a cada 4h</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">TRIBUNAIS COBERTOS</div>
+            <div class="stat-number">92</div>
+            <div class="stat-subtitle">TJSP, TJRJ, TRTs, TRFs, etc.</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">TAXA DE DISPONIBILIDADE</div>
+            <div class="stat-number">99.8%</div>
+            <div class="stat-subtitle">Robôs em operação normal</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">ÚLTIMO CICLO</div>
+            <div class="stat-number" style="font-size: 20px; color: var(--text-main);">Há 8 min</div>
+            <div class="stat-subtitle">Lote diário processado</div>
+          </div>
+        </div>
+
+        <!-- Toolbar Monitoramento -->
+        <div class="toolbar-bar">
+          <div class="search-box" style="width: 320px;">
+            <svg class="j-icon"><use href="#buscar"/></svg>
+            <input type="text" class="search-input" id="searchMon" placeholder="Buscar por CNJ, cliente ou tribunal..." oninput="renderMonitoramento()">
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <select class="select-filter" id="filterTribunalMon" onchange="renderMonitoramento()">
+              <option value="">Tribunais: Todos</option>
+              <option value="TJSP">TJSP</option>
+              <option value="TJRJ">TJRJ</option>
+              <option value="TJAL">TJAL</option>
+              <option value="TJBA">TJBA</option>
+              <option value="TJCE">TJCE</option>
+              <option value="TJRS">TJRS</option>
+              <option value="TJRO">TJRO</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tabela Fluida de Monitoramento -->
+        <div class="table-container">
+          <table class="studio-table">
+            <thead>
+              <tr>
+                <th class="col-mon-cnj">CNJ</th>
+                <th class="col-mon-cli">Cliente</th>
+                <th class="col-mon-trib">Tribunal</th>
+                <th class="col-mon-modo">Modo</th>
+                <th class="col-mon-cit">Citação</th>
+                <th class="col-mon-aud">Audiência</th>
+                <th class="col-mon-stat">Status</th>
+                <th class="col-mon-varredura">Última Varredura</th>
+                <th class="col-mon-act" style="text-align: right;">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyMonitoramento">
+              <!-- Inserido dinamicamente via JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+      <!-- ====================================================
+           5. VIEW: LOGS & CONFIG
+      ==================================================== -->
+      <section class="app-section" id="view-logs">
+        <div class="top-header">
+          <div>
+            <div class="eyebrow">AUDITORIA E SISTEMA</div>
+            <h1 class="page-title">Logs de Execução</h1>
+            <p class="page-desc">Registros de consultas nos tribunais, eventos de captura e sincronização com CRM Max.</p>
+          </div>
+        </div>
+        <div class="table-container" style="padding: 24px; font-family: monospace; font-size: 12px; line-height: 1.8; color: var(--text-secondary);">
+          <div>[2026-11-03 15:25:02] INFO: Varredura diária concluída. 19.355 processos consultados nos tribunais conveniados.</div>
+          <div>[2026-11-03 15:25:05] SUCCESS: 43 indicativos detectados (28 citações + 15 audiências). Feed consolidado atualizado.</div>
+          <div>[2026-11-03 15:25:09] INFO: Relatório assíncrono solicitado por Lucas Ferreira. Fila de background iniciada.</div>
+        </div>
+      </section>
+
+      <section class="app-section" id="view-config">
+        <div class="top-header">
+          <div>
+            <div class="eyebrow">PREFERÊNCIAS</div>
+            <h1 class="page-title">Configurações de Integração</h1>
+            <p class="page-desc">Parâmetros de conexão com CRM Max, webhooks de notificação e regras de monitoramento.</p>
+          </div>
+        </div>
+        <div class="table-container" style="padding: 24px;">
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">Integração CRM Max</div>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Sincronização automática das citações e audiências validadas diretamente nos cards dos processos.</p>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-primary" onclick="showToast('Conexão com CRM Max ativa e saudável.')">Testar Conexão CRM Max</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ========================================================
+       SLIDE-OVER DRAWER ADAPTATIVO (CITAÇÃO OU AUDIÊNCIA)
+  ======================================================== -->
+  <div class="drawer-overlay" id="drawerAdaptiveOverlay" onclick="fecharDrawerAdaptativo(event)">
+    <div class="drawer-panel" onclick="event.stopPropagation()">
+      <div class="drawer-header">
+        <div>
+          <div class="eyebrow" id="drawerEyebrow">DETALHES DO INDICATIVO</div>
+          <div class="drawer-title font-mono" id="drawerCnj">0000000-00.0000.0.00.0000</div>
+        </div>
+        <button class="drawer-close" onclick="fecharDrawerAdaptativo()">
+          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="4" y1="4" x2="12" y2="12"/><line x1="12" y1="4" x2="4" y2="12"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="drawer-tabs">
+        <button class="drawer-tab active" onclick="switchDrawerTab('visao-geral', this)">Visão geral</button>
+        <button class="drawer-tab" onclick="switchDrawerTab('texto-integral', this)">Texto do Andamento</button>
+        <button class="drawer-tab" onclick="switchDrawerTab('auditoria', this)">Auditoria</button>
+      </div>
+
+      <div class="drawer-body">
+        <!-- Aba 1: Visão Geral -->
+        <div class="drawer-tab-content active" id="dtab-visao-geral">
+          <div class="meta-property-row">
+            <div class="meta-prop-label">Tipo de Evento</div>
+            <div class="meta-prop-value" id="drawerTipoBadge">-</div>
+          </div>
+          <div class="meta-property-row">
+            <div class="meta-prop-label">Cliente / Carteira</div>
+            <div class="meta-prop-value" id="drawerCli">-</div>
+          </div>
+          <div class="meta-property-row">
+            <div class="meta-prop-label">Pólo da Parte</div>
+            <div class="meta-prop-value" id="drawerPolo">-</div>
+          </div>
+          <div class="meta-property-row">
+            <div class="meta-prop-label">Data do Ato</div>
+            <div class="meta-prop-value font-mono" id="drawerDataAto">-</div>
+          </div>
+          <div class="meta-property-row">
+            <div class="meta-prop-label">Local / Foro</div>
+            <div class="meta-prop-value" id="drawerLocal">-</div>
+          </div>
+          <div class="meta-property-row">
+            <div class="meta-prop-label">Status da Validação</div>
+            <div class="meta-prop-value" id="drawerStatusVal">-</div>
+          </div>
+
+          <div style="margin-top: 24px; padding: 14px; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px;">
+            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;" id="drawerBoxActionTitle">Validação Operacional</div>
+            <div style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 12px;" id="drawerBoxActionDesc">Classifique para registrar a conferência humana antes do batimento no CRM Max.</div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary btn-sm" style="flex: 1; color: #b91c1c; border-color: #fca5a5;" onclick="registrarFeedbackDrawerAtual('Inválido')">
+                <svg class="j-icon j-icon-sm"><use href="#feedback-invalido"/></svg>
+                Descartar (Inválido)
+              </button>
+              <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="registrarFeedbackDrawerAtual('Válido')">
+                <svg class="j-icon j-icon-sm"><use href="#feedback-valido"/></svg>
+                Validar Indicativo
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aba 2: Texto do Andamento / Despacho -->
+        <div class="drawer-tab-content" id="dtab-texto-integral">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;" id="drawerTextoTitle">Evidência Textual Capturada no Tribunal</div>
+          <div class="text-box-andamento font-mono" id="drawerTexto">-</div>
+        </div>
+
+        <!-- Aba 3: Auditoria -->
+        <div class="drawer-tab-content" id="dtab-auditoria">
+          <div class="meta-property-row">
+            <div class="meta-prop-label">Regra Aplicada</div>
+            <div class="meta-prop-value" id="drawerRegra">-</div>
+          </div>
+          <div class="meta-property-row">
+            <div class="meta-prop-label">Contexto Operacional</div>
+            <div class="meta-prop-value" id="drawerContexto">-</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer-footer">
+        <button class="btn btn-secondary" onclick="fecharDrawerAdaptativo()">Fechar</button>
+        <button class="btn btn-primary" onclick="registrarFeedbackDrawerAtual('Válido')">
+          <svg class="j-icon j-icon-sm"><use href="#feedback-valido"/></svg>
+          Confirmar Válido
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL: SOLICITAR EXPORTAÇÃO ASSÍNCRONA DE RELATÓRIO
+  ======================================================== -->
+  <div class="modal-backdrop" id="modalExportAssincrono" onclick="fecharModalExportAssincrono(event)">
+    <div class="modal-card" style="max-width: 580px;" onclick="event.stopPropagation()">
+      <div class="modal-card-header">
+        <span class="modal-card-title">Solicitar Exportação de Relatório</span>
+        <button class="drawer-close" onclick="fecharModalExportAssincrono()">
+          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="4" y1="4" x2="12" y2="12"/><line x1="12" y1="4" x2="4" y2="12"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-card-body">
+        <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;">
+          Devido ao volume massivo de dados e validações com os tribunais, o relatório será processado em <strong>segundo plano</strong>. Ele ficará disponível para download na aba <strong>Relatórios</strong> assim que gerado.
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Escopo da Extração</label>
+          <div class="scope-cards-row" style="grid-template-columns: 1fr;">
+            <label class="scope-card" style="margin-bottom: 6px;">
+              <input type="radio" name="escopoExport" value="Consolidado" checked>
+              <div>
+                <div class="scope-card-title">Lote Diário Consolidado (Citações + Audiências)</div>
+                <div class="scope-card-desc">Todos os 43 indicativos identificados na varredura de hoje com validações.</div>
+              </div>
+            </label>
+            <label class="scope-card" style="margin-bottom: 6px;">
+              <input type="radio" name="escopoExport" value="Citações">
+              <div>
+                <div class="scope-card-title">Relatório Massivo de Citações (Últimos 30 dias)</div>
+                <div class="scope-card-desc">Histórico completo de citações detectadas para batimento (~32.000 itens).</div>
+              </div>
+            </label>
+            <label class="scope-card">
+              <input type="radio" name="escopoExport" value="Audiências">
+              <div>
+                <div class="scope-card-title">Pauta Completa de Audiências Futuras</div>
+                <div class="scope-card-desc">Todas as audiências designadas e realizadas identificadas na base (~3.500 itens).</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Formato do Arquivo</label>
+          <div style="display: flex; gap: 10px;">
+            <label class="scope-card" style="flex: 1;">
+              <input type="radio" name="formatoExport" value="xlsx" checked>
+              <div>
+                <div class="scope-card-title">Excel (.xlsx)</div>
+                <div class="scope-card-desc">Formatado para CRM Max</div>
+              </div>
+            </label>
+            <label class="scope-card" style="flex: 1;">
+              <input type="radio" name="formatoExport" value="csv">
+              <div>
+                <div class="scope-card-title">CSV (.csv)</div>
+                <div class="scope-card-desc">UTF-8 estruturado</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-card-footer">
+        <button class="btn btn-secondary" onclick="fecharModalExportAssincrono()">Cancelar</button>
+        <button class="btn btn-primary" onclick="confirmarSolicitacaoExportAssincrono()">
+          <svg class="j-icon j-icon-sm"><use href="#exportar"/></svg>
+          Iniciar Processamento em Background
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL SIMPLIFICADO: REGISTRAR PROCESSO
+  ======================================================== -->
+  <div class="modal-backdrop" id="modalRegistrar" onclick="fecharModalRegistrar(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div class="modal-card-header">
+        <span class="modal-card-title">Registrar Processo</span>
+        <button class="drawer-close" onclick="fecharModalRegistrar()">
+          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="4" y1="4" x2="12" y2="12"/><line x1="12" y1="4" x2="4" y2="12"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-card-body">
+        
+        <!-- 1. Número do Processo (CNJ) -->
+        <div class="form-group">
+          <label class="form-label">Número do Processo (CNJ)<span class="required">*</span></label>
+          <input type="text" class="form-input font-mono" id="regCnj" placeholder="0000000-00.0000.0.00.0000" maxlength="25" oninput="aplicarMascaraCnj(this)">
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Após cadastrado, o processo entra automaticamente na esteira de monitoramento contínuo.</div>
+        </div>
+
+        <!-- 2. Cliente e Pólo Amplo (Todos os tipos) -->
+        <div style="display: grid; grid-template-columns: 1fr 180px; gap: 12px;" class="form-group">
+          <div>
+            <label class="form-label">Cliente / Carteira</label>
+            <input type="text" class="form-input" id="regCliente" placeholder="Ex: Enter Volkswagen, Santander, Banco Pan">
+          </div>
+          <div>
+            <label class="form-label">Pólo da Parte</label>
+            <select class="select-filter form-input" id="regPolo" style="width: 100%; height: 38px;">
+              <option value="Réu" selected>Réu (Passivo)</option>
+              <option value="Autor">Autor (Ativo)</option>
+              <option value="Terceiro Interessado">Terceiro Interessado</option>
+              <option value="Assistente">Assistente / Outros</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 3. Controle do Cliente -->
+        <div class="form-group">
+          <label class="form-label">Controle do Cliente / Código Interno</label>
+          <input type="text" class="form-input" id="regControle" placeholder="Ex: VW-BR-2026-9901">
+        </div>
+
+        <!-- 4. Modo de Operação (Cards Refinados com Affordance Tátil) -->
+        <div class="form-group">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+            <label class="form-label" style="margin: 0;">Modo de Operação</label>
+            <span style="font-size: 11px; color: var(--text-muted);">Selecione a intensidade de varredura</span>
+          </div>
+          <div class="mode-selector-grid">
+            <div class="mode-card mode-card-consulta-mon active" id="modeCard-consulta-mon" onclick="setModoOperacao('Consulta + Mon')">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div class="mode-card-title" style="color: #1e40af;">Consulta + Mon</div>
+                <span style="font-size: 9.5px; font-weight: 700; background: #dbeafe; color: #1e40af; padding: 1px 5px; border-radius: 4px;">Padrão</span>
+              </div>
+              <div class="mode-card-desc">Busca inicial completa no acervo e monitoramento contínuo.</div>
+            </div>
+            <div class="mode-card mode-card-so-mon" id="modeCard-so-mon" onclick="setModoOperacao('Só Monitorar')">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div class="mode-card-title" style="color: #065f46;">Só Monitorar</div>
+                <span style="font-size: 9.5px; font-weight: 700; background: #dcfce7; color: #166534; padding: 1px 5px; border-radius: 4px;">Econômico</span>
+              </div>
+              <div class="mode-card-desc">Apenas novos andamentos a partir da data de hoje.</div>
+            </div>
+            <div class="mode-card mode-card-consulta-unica" id="modeCard-consulta-unica" onclick="setModoOperacao('Consulta Única')">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div class="mode-card-title" style="color: #475569;">Consulta Única</div>
+                <span style="font-size: 9.5px; font-weight: 700; background: #f1f5f9; color: #475569; padding: 1px 5px; border-radius: 4px;">Pontual</span>
+              </div>
+              <div class="mode-card-desc">Varredura instantânea pontual sem acompanhamento.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. O que deseja buscar (4 Indicativos com Destaque Visual Sutil e Refinado) -->
+        <div class="form-group">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+            <label class="form-label" style="margin: 0;">O que deseja buscar? (Indicativos)</label>
+            <span style="font-size: 11px; color: var(--text-muted);">Classificações rastreadas pelos robôs</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <label class="scope-card scope-capa has-checked" id="cardScopeCapa">
+              <input type="checkbox" id="scopeCapa" checked onchange="toggleScopeCardVisual(this, 'cardScopeCapa')">
+              <div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="ind-pill ind-pill-capa">CAPA</span>
+                  <div class="scope-card-title">Dados de Capa</div>
+                </div>
+                <div class="scope-card-desc">Partes, vara, valor da causa e dados gerais.</div>
+              </div>
+            </label>
+
+            <label class="scope-card scope-cit has-checked" id="cardScopeCit">
+              <input type="checkbox" id="scopeCit" checked onchange="toggleScopeCardVisual(this, 'cardScopeCit')">
+              <div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="ind-pill ind-pill-cit">CIT</span>
+                  <div class="scope-card-title">Citação</div>
+                  <span class="micro-dot dot-citacao" style="margin: 0;"></span>
+                </div>
+                <div class="scope-card-desc">Indicativos de citação da parte para defesa.</div>
+              </div>
+            </label>
+
+            <label class="scope-card scope-aud has-checked" id="cardScopeAud">
+              <input type="checkbox" id="scopeAud" checked onchange="toggleScopeCardVisual(this, 'cardScopeAud')">
+              <div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="ind-pill ind-pill-aud">AUD</span>
+                  <div class="scope-card-title">Audiência</div>
+                  <span class="micro-dot dot-audiencia" style="margin: 0;"></span>
+                </div>
+                <div class="scope-card-desc">Audiências futuras agendadas ou realizadas.</div>
+              </div>
+            </label>
+
+            <label class="scope-card scope-hab has-checked" id="cardScopeHab">
+              <input type="checkbox" id="scopeHab" checked onchange="toggleScopeCardVisual(this, 'cardScopeHab')">
+              <div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="ind-pill ind-pill-hab">HAB</span>
+                  <div class="scope-card-title">Habilitação</div>
+                </div>
+                <div class="scope-card-desc">Habilitação de advogado e procurações nos autos.</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-card-footer">
+        <button class="btn btn-secondary" onclick="fecharModalRegistrar()">Cancelar</button>
+        <button class="btn btn-primary" onclick="salvarNovoProcesso()">
+          <svg class="j-icon j-icon-sm"><use href="#novo-processo"/></svg>
+          Cadastrar e Monitorar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL SIMPLIFICADO: IMPORTAR PLANILHA (WIZARD 3 PASSOS)
+  ======================================================== -->
+  <div class="modal-backdrop" id="modalImportar" onclick="fecharModalImportar(event)">
+    <div class="modal-card" style="max-width: 680px;" onclick="event.stopPropagation()">
+      <div class="modal-card-header">
+        <span class="modal-card-title">Importar Planilha de Processos</span>
+        <button class="drawer-close" onclick="fecharModalImportar()">
+          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="4" y1="4" x2="12" y2="12"/><line x1="12" y1="4" x2="4" y2="12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- 3 Passos do Wizard -->
+      <div class="wizard-steps">
+        <div class="w-step active" id="wstep-1">
+          <div class="w-step-num">1</div>
+          <span>Configuração</span>
+        </div>
+        <div class="w-step" id="wstep-2">
+          <div class="w-step-num">2</div>
+          <span>Enviar Arquivo</span>
+        </div>
+        <div class="w-step" id="wstep-3">
+          <div class="w-step-num">3</div>
+          <span>Validação & Preview</span>
+        </div>
+      </div>
+
+      <div class="modal-card-body" id="importWizardBody">
+        
+        <!-- Passo 1: Configuração -->
+        <div id="step-content-1">
+          <div style="font-size: 13.5px; font-weight: 600; margin-bottom: 12px;">Selecione o modo de monitoramento para a planilha:</div>
+          
+          <div class="mode-selector-grid" style="margin-bottom: 20px;">
+            <div class="mode-card active" onclick="setImportModo(this, 'Consulta + Mon')">
+              <div class="mode-card-title">Consulta + Mon</div>
+              <div class="mode-card-desc">Busca inicial e ativação de monitoramento contínuo.</div>
+            </div>
+            <div class="mode-card" onclick="setImportModo(this, 'Só Monitorar')">
+              <div class="mode-card-title">Só Monitorar</div>
+              <div class="mode-card-desc">Apenas novos andamentos a partir da data de importação.</div>
+            </div>
+            <div class="mode-card" onclick="setImportModo(this, 'Consulta Única')">
+              <div class="mode-card-title">Consulta Única</div>
+              <div class="mode-card-desc">Varredura pontual sem ativação contínua.</div>
+            </div>
+          </div>
+
+          <div style="font-size: 13px; font-weight: 600; margin-bottom: 8px;">Indicativos a monitorar nos processos:</div>
+          <div class="scope-cards-row">
+            <label class="scope-card">
+              <input type="checkbox" checked>
+              <div>
+                <div class="scope-card-title">Citações</div>
+                <div class="scope-card-desc">Indicativos de citação para defesa.</div>
+              </div>
+            </label>
+            <label class="scope-card">
+              <input type="checkbox" checked>
+              <div>
+                <div class="scope-card-title">Audiências</div>
+                <div class="scope-card-desc">Designações de sessões conciliatórias e de instrução.</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Passo 2: Enviar Arquivo -->
+        <div id="step-content-2" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-size: 13px; font-weight: 600;">Planilha com colunas esperadas:</span>
+            <a href="#" style="font-size: 12px; color: var(--brand-blue); text-decoration: none; font-weight: 600;" onclick="showToast('Baixando modelo_importacao_jurify.xlsx...')">
+              ↓ Baixar modelo de planilha
+            </a>
+          </div>
+
+          <div class="dropzone-area" onclick="avancarStepImportar(3)">
+            <svg class="j-icon" style="width: 36px; height: 36px; margin: 0 auto 8px; color: var(--brand-blue); display: block;"><use href="#importar"/></svg>
+            <div style="font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;">Clique ou arraste seu arquivo .xlsx ou .csv aqui</div>
+            <div style="font-size: 12px; color: var(--text-muted);">Suporta até 50.000 processos por arquivo</div>
+          </div>
+        </div>
+
+        <!-- Passo 3: Validação & Preview -->
+        <div id="step-content-3" style="display: none;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px; color: #166534; font-size: 13px; font-weight: 600;">
+            <svg class="j-icon" style="color: #166534;"><use href="#feedback-valido"/></svg>
+            Planilha validada: 1.450 processos entrarão diretamente em monitoramento!
+          </div>
+
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase;">Prévia dos 3 primeiros registros:</div>
+          <div class="table-container" style="margin-bottom: 12px;">
+            <table class="studio-table">
+              <thead>
+                <tr>
+                  <th>Processo (CNJ)</th>
+                  <th>Cliente</th>
+                  <th>Pólo</th>
+                  <th>Controle</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="font-mono">4031490-55.2026.8.26.0003</td>
+                  <td>ENTER VOLKSWAGEN</td>
+                  <td>Réu</td>
+                  <td>VW-BR-4031</td>
+                </tr>
+                <tr>
+                  <td class="font-mono">4006610-61.2026.8.26.0047</td>
+                  <td>ENTER BMG</td>
+                  <td>Réu</td>
+                  <td>BMG-SP-4006</td>
+                </tr>
+                <tr>
+                  <td class="font-mono">0001512-68.2026.8.05.0106</td>
+                  <td>ENTER VOLKSWAGEN</td>
+                  <td>Réu</td>
+                  <td>VW-BA-1512</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-card-footer">
+        <button class="btn btn-secondary" id="btnImportVoltar" onclick="voltarStepImportar()" style="display: none;">Voltar</button>
+        <button class="btn btn-secondary" onclick="fecharModalImportar()">Cancelar</button>
+        <button class="btn btn-primary" id="btnImportAvancar" onclick="avancarStepImportar()">Avançar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ========================================================
+       SCRIPTS JAVASCRIPT
+  ======================================================== -->
+  <script>
+    const $ = id => document.getElementById(id);
+    
+    // DATASETS
+    let unifiedFeed = [{"id": "DEMO-01", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "FORTE", "forca": "FORTE – Citação eletrônica confirmada", "cnj": "0001024-88.2026.8.26.0100", "cliente": "Carteira Alfa", "polo": "Réu", "dataAto": "2026-10-27", "dataConsumo": "2026-10-29", "isTardia": true, "hearing": "Sinal de audiência", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Confirmada a citação eletrônica no portal eletrônico do tribunal de origem.", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Ato de 27/10 recebido em 29/10. Captura tardia: pode ser novo para a operação mesmo sem movimentação no dia.", "regra": "Exemplo de evidência textual forte (leitura confirmada); não confirma estado jurídico atual."}, {"id": "DEMO-02", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "MÉDIO", "forca": "MÉDIO – Mandado expedido", "cnj": "0001024-88.2026.8.26.0100", "cliente": "Carteira Alfa", "polo": "Réu", "dataAto": "2026-10-28", "dataConsumo": "2026-10-29", "isTardia": false, "hearing": "Sinal de audiência", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Expedida nova comunicação de citação por mandado do Oficial de Justiça.", "status": "DETECTADO", "validacao": "Válido", "contexto": "Dois eventos ilustrativos no mesmo CNJ. Exibidos separadamente para garantir completude operacional.", "regra": "Evento distinto do DEMO-01 no mesmo processo. Não é descartado por ter menor força."}, {"id": "DEMO-03", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "FRACO", "forca": "FRACO – Determinada a citação", "cnj": "0002155-12.2026.8.26.0001", "cliente": "Carteira Beta", "polo": "Réu", "dataAto": "2026-10-29", "dataConsumo": "2026-10-29", "isTardia": false, "hearing": "Não informado", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Determinada a citação da parte requerida para apresentar defesa em prazo de lei.", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Indicativo com baixa probabilidade. Manter no lote com ressalva para validação humana.", "regra": "Determinação é um indicativo textual; não comprova cumprimento ou início de prazo."}, {"id": "DEMO-04", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "MÉDIO", "forca": "MÉDIO – Expedição de mandado", "cnj": "0003489-33.2026.8.26.0002", "cliente": "Carteira Beta", "polo": "Réu", "dataAto": null, "dataConsumo": "2026-10-29", "isTardia": false, "hearing": "Sinal de audiência", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Expedição de mandado de citação em cumprimento a despacho judicial.", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Data ausente é exceção visível. Um filtro por movimentação retiraria o evento do recorte diário.", "regra": "Exemplo com data de movimentação ausente; dado não foi completado artificialmente."}, {"id": "DEMO-05", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "NENHUM", "forca": "NENHUM – Tentativa frustrada / não confirmada", "cnj": "0004901-77.2026.8.26.0004", "cliente": "Carteira Alfa", "polo": "Réu", "dataAto": "2026-10-28", "dataConsumo": "2026-10-29", "isTardia": false, "hearing": "Não informado", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Tentativa de citação frustrada. Certidão negativa lavrada pelo Oficial de Justiça.", "status": "DETECTADO", "validacao": "Inválido", "contexto": "NENHUM pode aparecer como principal no script. Confirmar se pertence ao universo devido; não confundir contagem de registros com evidência positiva.", "regra": "Regra negativa ilustrativa. Inclusão testa a definição de elegibilidade no conjunto entregue."}, {"id": "DEMO-06", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "FORTE", "forca": "FORTE – Juntada de AR positivo", "cnj": "0005822-44.2026.8.26.0005", "cliente": "Carteira Beta", "polo": "Réu", "dataAto": "2026-10-29", "dataConsumo": "2026-10-29", "isTardia": false, "hearing": "Não informado", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Juntada de AR positivo associado à citação da instituição financeira requerida.", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Ausência de informação de audiência não prova ausência de audiência. Conferência no Max continua desconhecida.", "regra": "Força do texto não é probabilidade de acerto, urgência ou prazo legal."}, {"id": "6480242", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "FORTE", "forca": "FORTE – Citação eletrônica confirmada / lida", "cnj": "4031490-55.2026.8.26.0003", "cliente": "ENTER VOLKSWAGEN", "polo": "Réu", "dataAto": "2026-10-21", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Sinal de audiência", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Confirmada | Confirmada - Confirmada a citação eletrônica - Refer. ao Evento: 9 - Ciência no Domicílio Eletrônico", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para FORTE."}, {"id": "6479960", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "FORTE", "forca": "FORTE – Citação eletrônica confirmada / lida", "cnj": "4006610-61.2026.8.26.0047", "cliente": "ENTER BMG", "polo": "Réu", "dataAto": "2026-10-21", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Não informado", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Confirmada | Confirmada - Confirmada a citação eletrônica - Refer. ao Evento: 19 - Ciência no Domicílio Eletrônico", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para FORTE."}, {"id": "6479774", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "FORTE", "forca": "FORTE – Citação eletrônica confirmada / lida", "cnj": "0800767-79.2026.8.19.0069", "cliente": "BB 2020/03120", "polo": "Réu", "dataAto": "2026-10-21", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Sinal de audiência", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Confirmada | Confirmada - Confirmada a citação eletrônica - Refer. ao Evento: 16", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para FORTE."}, {"id": "6479647", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "FORTE", "forca": "FORTE – Citação eletrônica confirmada / lida", "cnj": "0317142-55.2026.8.04.1000", "cliente": "ENTER VOLKSWAGEN", "polo": "Réu", "dataAto": "2026-10-20", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Não informado", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Leitura | LEITURA - LEITURA DE CITAÇÃO REALIZADA - Para BANCO VOLKSWAGEN S.A em 20/10/2026 referente ao evento de expedição seq. 8. Início do prazo em 27/10/2026 Obs: Citação lida via Domicilio Eletrônico.", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para FORTE."}, {"id": "6479567", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "FORTE", "forca": "FORTE – Citação eletrônica confirmada / lida", "cnj": "5048472-53.2026.8.21.0008", "cliente": "ENTER VOLKSWAGEN", "polo": "Réu", "dataAto": "2026-10-20", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Não informado", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Confirmada a citação eletrônica - refer. ao evento: 8 - ciência no domicílio eletrônico | Confirmada a citação eletrônica - Refer. ao Evento: 8 - Ciência no Domicílio Eletrônico - Confirmada a citação eletrônica - Refer. ao Evento: 8 - Ciência no Domicílio Eletrônico", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para FORTE."}, {"id": "6479114", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "FORTE", "forca": "FORTE – Citação eletrônica confirmada / lida", "cnj": "1011710-41.2026.8.13.0231", "cliente": "ENTER PARANA", "polo": "Réu", "dataAto": "2026-10-22", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Sinal de audiência", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Confirmada | Confirmada - Confirmada a citação eletrônica - Refer. ao Evento: 21 - Ciência no Domicílio Eletrônico", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para FORTE."}, {"id": "6477961", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "FORTE", "forca": "FORTE – Citação eletrônica confirmada / lida", "cnj": "4001472-37.2026.8.26.0040", "cliente": "ENTER BMG", "polo": "Réu", "dataAto": "2026-10-12", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Não informado", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Confirmada - Confirmada a citação eletrônica - Refer. ao Evento: 8 - Ciência no Domicílio Eletrônico", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para FORTE."}, {"id": "6477942", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "FORTE", "forca": "FORTE – Citação eletrônica confirmada / lida", "cnj": "0002447-97.2026.8.25.0059", "cliente": "ENTER BMG", "polo": "Réu", "dataAto": "2026-10-06", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Sinal de audiência", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Citação >> Eletrônica >> Confirmada - Citação Eletrônica consultada em 06/10/2026, por meio do Domicílio Judicial Eletrônico, comunicação/mandado n° 202686007935, referente ao movimento de Citação Eletrônica do dia 05/10/2026, às 13:13:19.", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para FORTE."}, {"id": "6480381", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "MÉDIO", "forca": "MÉDIO – Citação expedida (sem confirmação)", "cnj": "1001680-47.2026.8.13.0133", "cliente": "ENTER PARANA", "polo": "Réu", "dataAto": "2026-10-22", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Não informado", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Expedida/certificada | Expedida/certificada - Expedida/certificada a citação eletrônicaRefer. ao Evento 24(RÉU - PARANA BANCO S/A) Prazo: 5 dias Status:AGUARD. ABERTURA", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para MÉDIO."}, {"id": "6480380", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "MÉDIO", "forca": "MÉDIO – Citação expedida (sem confirmação)", "cnj": "5029157-81.2026.8.24.0064", "cliente": "ENTER- BMG", "polo": "Réu", "dataAto": "2026-10-22", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Não informado", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Expedida/certificada | Expedida/certificada - Expedida/certificada a citação eletrônicaRefer. ao Evento 12(REQUERIDO - BANCO BMG S.A) Prazo: 15 dias Status:AGUARD. ABERTURA", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para MÉDIO."}, {"id": "6479076", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "MÉDIO", "forca": "MÉDIO – Mandado de citação expedido", "cnj": "1002231-24.2026.5.02.0605", "cliente": "SABESP", "polo": "Réu", "dataAto": "2026-10-22", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Sinal de audiência", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Expedido(a) | Expedido(a) - Expedido(a) Mandado de Citação a(o) CTC PAVIMENTACAO LTDA", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para MÉDIO."}, {"id": "6478908", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "MÉDIO", "forca": "MÉDIO – Citação expedida (sem confirmação)", "cnj": "3162591-39.2026.8.19.0001", "cliente": "ENTER VOLKSWAGEN", "polo": "Réu", "dataAto": "2026-10-21", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Não informado", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Expedida/certificada | Expedida/certificada - Expedida/certificada a citação eletrônicaRefer. ao Evento 13(RÉU - BANCO VOLKSWAGEN S A) Prazo: 15 dias Status:AGUARD. ABERTURA", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para MÉDIO."}, {"id": "6477916", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "MÉDIO", "forca": "MÉDIO – Citação expedida (sem confirmação)", "cnj": "5025160-96.2026.8.08.0012", "cliente": "ENTER BMG", "polo": "Réu", "dataAto": "2026-10-06", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Sinal de audiência", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Expedição - Expedição de Carta Postal - Citação.", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para MÉDIO."}, {"id": "6477908", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "MÉDIO", "forca": "MÉDIO – Citação expedida (sem confirmação)", "cnj": "5025280-42.2026.8.08.0012", "cliente": "ENTER BMG", "polo": "Réu", "dataAto": "2026-10-08", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Não informado", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Expedição - Expedição de Carta Postal - Citação.", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para MÉDIO."}, {"id": "6478102", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "FRACO", "forca": "FRACO – Citação determinada / solicitada", "cnj": "4000876-63.2026.8.26.0263", "cliente": "ENTER- BMG", "polo": "Réu", "dataAto": "2026-10-21", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Não informado", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Determinada | Determinada - Determinada a citação", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para FRACO."}, {"id": "6478001", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "MÉDIO", "forca": "MÉDIO – Citação expedida (sem confirmação)", "cnj": "8001305-26.2026.8.05.0269", "cliente": "ENTER BMG", "polo": "Réu", "dataAto": "2026-09-29", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Sinal de audiência", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Expedição - Expedição de citação.", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para MÉDIO."}, {"id": "6477866", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "MÉDIO", "forca": "MÉDIO – Citação expedida (sem confirmação)", "cnj": "8002506-93.2025.8.05.0170", "cliente": "ENTER BMG", "polo": "Réu", "dataAto": "2026-09-25", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Não informado", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Expedição - Expedição de citação.", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para MÉDIO."}, {"id": "6477853", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "MÉDIO", "forca": "MÉDIO – Citação expedida (sem confirmação)", "cnj": "6001948-53.2026.8.16.0029", "cliente": "ENTER BMG", "polo": "Réu", "dataAto": "2026-10-14", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Sinal de audiência", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Expedição - Expedição de Carta pelo Correio - 1 carta", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para MÉDIO."}, {"id": "6480408", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "MÉDIO", "forca": "MÉDIO – Citação expedida (sem confirmação)", "cnj": "4001384-20.2026.8.26.0615", "cliente": "BB 2020/03120", "polo": "Réu", "dataAto": "2026-10-16", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Não informado", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Expedida/certificada - Expedida/certificada a citação eletrônicaRefer. ao Evento 21(RÉU - ATIVOS S.A. SECURITIZADORA DE CREDITOS FINANCEIROS) Prazo: 1 dia Status:ABERTO Data inicial da contagem do prazo: 27/10/2026 00:00:00 Data final: 27/10/2026 23:59:59", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para MÉDIO."}, {"id": "6480406", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "FORTE", "forca": "FORTE – Citação eletrônica confirmada / lida", "cnj": "4001384-20.2026.8.26.0615", "cliente": "BB 2020/03120", "polo": "Réu", "dataAto": "2026-10-19", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Não informado", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Confirmada - Confirmada a citação eletrônica - Refer. ao Evento: 23 - Ciência no Domicílio Eletrônico", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para FORTE."}, {"id": "6480392", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "MÉDIO", "forca": "MÉDIO – Citação expedida (sem confirmação)", "cnj": "3005682-65.2026.8.19.0066", "cliente": "BB 2020/03120", "polo": "Réu", "dataAto": "2026-10-07", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Sinal de audiência", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Expedida/certificada | Expedida/certificada - Expedida/certificada a citação eletrônicaRefer. ao Evento 13(RÉU - BANCO DO BRASIL SA) Prazo: 15 dias Status:ABERTO Data inicial da contagem do prazo: 19/10/2026 00:00:00 Data final: 11/11/2026 23:59:59", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para MÉDIO."}, {"id": "6480391", "tipo": "CITACAO", "tipoLabel": "Citação", "subtipo": "FRACO", "forca": "FRACO – Citação determinada / solicitada", "cnj": "5029157-81.2026.8.24.0064", "cliente": "ENTER- BMG", "polo": "Réu", "dataAto": "2026-10-22", "dataConsumo": "2026-10-22", "isTardia": false, "hearing": "Não informado", "local": "Juízo de Origem (Vara Cível)", "vara": "Tribunal de Justiça", "texto": "Determinada | Determinada - Determinada a citação", "status": "DETECTADO", "validacao": "Pendente", "contexto": "Registro verificado na base operacional. Conferência no Max: sem retorno.", "regra": "Classificação baseada em regras textuais para FRACO."}, {"id": "AUD-01", "tipo": "AUDIENCIA", "tipoLabel": "Audiência", "subtipo": "REALIZADA", "forca": "Audiência de Instrução e Julgamento", "cnj": "0001512-68.2026.8.05.0106", "cliente": "ENTER VOLKSWAGEN", "polo": "Réu", "dataAto": "2026-11-03", "dataHora": "03/11/2026 08:22", "dataConsumo": "2026-11-03", "isTardia": false, "hearing": "Designada", "local": "Telepresencial (Teams)", "vara": "Juizado Especial Cível de Dias d'Ávila", "texto": "Aos 03 dias do mês de novembro do ano de 2026, nesta cidade, na sala de audiências virtual, realizou-se a audiência de instrução e julgamento com a presença das partes e patronos.", "status": "REALIZADA", "validacao": "Pendente", "contexto": "Audiência realizada identificada no tribunal Juizado Especial Cível de Dias d'Ávila.", "regra": "Detecção de designação/realização de ato solene com intimação das partes."}, {"id": "AUD-02", "tipo": "AUDIENCIA", "tipoLabel": "Audiência", "subtipo": "DESIGNADA", "forca": "Audiência de Instrução e Julgamento Cível", "cnj": "3001316-61.2026.8.06.6171", "cliente": "ENTER BMG", "polo": "Réu", "dataAto": "2026-10-20", "dataHora": "20/10/2026 14:00", "dataConsumo": "2026-11-03", "isTardia": false, "hearing": "Designada", "local": "Juizado Especial Cível e Criminal de Tauá", "vara": "Comarca de Tauá - CE", "texto": "Designo audiência de instrução e julgamento para o dia 20/10/2026 às 14:00h, devendo as partes comparecer acompanhadas de suas testemunhas, sob pena de preclusão.", "status": "DESIGNADA", "validacao": "Pendente", "contexto": "Audiência designada identificada no tribunal Comarca de Tauá - CE.", "regra": "Detecção de designação/realização de ato solene com intimação das partes."}, {"id": "AUD-03", "tipo": "AUDIENCIA", "tipoLabel": "Audiência", "subtipo": "DESIGNADA", "forca": "Audiência de Conciliação (Art. 334 CPC)", "cnj": "0042189-44.2026.8.26.0100", "cliente": "SANTANDER BRASIL", "polo": "Réu", "dataAto": "2026-11-18", "dataHora": "18/11/2026 15:30", "dataConsumo": "2026-11-03", "isTardia": false, "hearing": "Designada", "local": "2ª Vara Cível Central", "vara": "Foro Central Cível João Mendes Júnior - SP", "texto": "Designo a realização de audiência de conciliação para o dia 18/11/2026, às 15:30 horas, nos moldes do art. 334 do CPC, a ser realizada pelo CEJUSC Central.", "status": "DESIGNADA", "validacao": "Pendente", "contexto": "Audiência designada identificada no tribunal Foro Central Cível João Mendes Júnior - SP.", "regra": "Detecção de designação/realização de ato solene com intimação das partes."}, {"id": "AUD-04", "tipo": "AUDIENCIA", "tipoLabel": "Audiência", "subtipo": "DESIGNADA", "forca": "Audiência Una de Conciliação e Instrução", "cnj": "5048472-53.2026.8.21.0008", "cliente": "ENTER VOLKSWAGEN", "polo": "Réu", "dataAto": "2026-11-25", "dataHora": "25/11/2026 10:00", "dataConsumo": "2026-11-03", "isTardia": false, "hearing": "Designada", "local": "3ª Vara Cível da Comarca de Canoas", "vara": "Foro de Canoas - RS", "texto": "Nos termos do Provimento Conjunto, designo sessão una para o dia 25 de novembro de 2026 às 10:00 horas. Intimem-se as partes.", "status": "DESIGNADA", "validacao": "Pendente", "contexto": "Audiência designada identificada no tribunal Foro de Canoas - RS.", "regra": "Detecção de designação/realização de ato solene com intimação das partes."}, {"id": "AUD-05", "tipo": "AUDIENCIA", "tipoLabel": "Audiência", "subtipo": "DESIGNADA", "forca": "Audiência de Conciliação", "cnj": "4031490-55.2026.8.26.0003", "cliente": "ENTER VOLKSWAGEN", "polo": "Réu", "dataAto": "2026-12-01", "dataHora": "01/12/2026 13:45", "dataConsumo": "2026-11-03", "isTardia": false, "hearing": "Designada", "local": "Telepresencial (Google Meet)", "vara": "1ª Vara do Juizado Especial Cível - Jabaquara", "texto": "Designo audiência de tentativa de conciliação para o dia 01/12/2026 às 13:45h. Link da sala virtual enviado ao patrono cadastrado.", "status": "DESIGNADA", "validacao": "Pendente", "contexto": "Audiência designada identificada no tribunal 1ª Vara do Juizado Especial Cível - Jabaquara.", "regra": "Detecção de designação/realização de ato solene com intimação das partes."}, {"id": "AUD-06", "tipo": "AUDIENCIA", "tipoLabel": "Audiência", "subtipo": "DESIGNADA", "forca": "Audiência de Instrução e Julgamento", "cnj": "0003412-88.2026.8.19.0001", "cliente": "BANCO PAN", "polo": "Réu", "dataAto": "2026-11-04", "dataHora": "04/11/2026 14:15", "dataConsumo": "2026-11-03", "isTardia": false, "hearing": "Designada", "local": "5ª Vara Cível da Capital", "vara": "Tribunal de Justiça do Rio de Janeiro - TJRJ", "texto": "Defiro o rol de testemunhas tempestivamente apresentado e designo instrução para 04/11/2026 às 14:15h.", "status": "DESIGNADA", "validacao": "Pendente", "contexto": "Audiência designada identificada no tribunal Tribunal de Justiça do Rio de Janeiro - TJRJ.", "regra": "Detecção de designação/realização de ato solene com intimação das partes."}, {"id": "AUD-07", "tipo": "AUDIENCIA", "tipoLabel": "Audiência", "subtipo": "REALIZADA", "forca": "Audiência de Instrução e Julgamento", "cnj": "1002341-90.2026.8.26.0002", "cliente": "CLARO BRASIL", "polo": "Réu", "dataAto": "2026-10-29", "dataHora": "29/10/2026 11:00", "dataConsumo": "2026-11-03", "isTardia": false, "hearing": "Designada", "local": "Juizado Especial Cível de Santo Amaro", "vara": "Foro Regional II - Santo Amaro - SP", "texto": "Aberta a audiência, proposta a conciliação, restou infrutífera. Foram colhidos os depoimentos e os autos vieram conclusos para prolação de sentença.", "status": "REALIZADA", "validacao": "Pendente", "contexto": "Audiência realizada identificada no tribunal Foro Regional II - Santo Amaro - SP.", "regra": "Detecção de designação/realização de ato solene com intimação das partes."}, {"id": "AUD-08", "tipo": "AUDIENCIA", "tipoLabel": "Audiência", "subtipo": "DESIGNADA", "forca": "Audiência de Conciliação - Art. 334 CPC", "cnj": "0700441-93.2026.8.02.0034", "cliente": "ENTER VOLKSWAGEN", "polo": "Réu", "dataAto": "2026-12-09", "dataHora": "09/12/2026 09:30", "dataConsumo": "2026-11-03", "isTardia": false, "hearing": "Designada", "local": "Vara Única de Porto de Pedras", "vara": "Tribunal de Justiça de Alagoas - TJAL", "texto": "Encaminhem-se os autos ao CEJUSC para pauta de audiência de conciliação do dia 09/12/2026 às 09:30.", "status": "DESIGNADA", "validacao": "Pendente", "contexto": "Audiência designada identificada no tribunal Tribunal de Justiça de Alagoas - TJAL.", "regra": "Detecção de designação/realização de ato solene com intimação das partes."}, {"id": "AUD-09", "tipo": "AUDIENCIA", "tipoLabel": "Audiência", "subtipo": "DESIGNADA", "forca": "Audiência de Instrução e Julgamento", "cnj": "4006610-61.2026.8.26.0047", "cliente": "ENTER BMG", "polo": "Réu", "dataAto": "2026-12-15", "dataHora": "15/12/2026 16:00", "dataConsumo": "2026-11-03", "isTardia": false, "hearing": "Designada", "local": "2ª Vara Cível de Assis", "vara": "Foro de Assis - SP", "texto": "Designo oitiva do representante legal da instituição financeira requerida para 15/12/2026 às 16:00 horas.", "status": "DESIGNADA", "validacao": "Pendente", "contexto": "Audiência designada identificada no tribunal Foro de Assis - SP.", "regra": "Detecção de designação/realização de ato solene com intimação das partes."}, {"id": "AUD-10", "tipo": "AUDIENCIA", "tipoLabel": "Audiência", "subtipo": "REALIZADA", "forca": "Audiência de Conciliação", "cnj": "8007677-09.2026.8.19.0069", "cliente": "BB 2020/03120", "polo": "Réu", "dataAto": "2026-10-28", "dataHora": "28/10/2026 15:00", "dataConsumo": "2026-11-03", "isTardia": false, "hearing": "Designada", "local": "Vara Única de Mangaratiba", "vara": "Comarca de Mangaratiba - RJ", "texto": "Presentes as partes, foi concedido prazo de 5 dias úteis para manifestação sobre acordo amigável.", "status": "REALIZADA", "validacao": "Pendente", "contexto": "Audiência realizada identificada no tribunal Comarca de Mangaratiba - RJ.", "regra": "Detecção de designação/realização de ato solene com intimação das partes."}, {"id": "AUD-11", "tipo": "AUDIENCIA", "tipoLabel": "Audiência", "subtipo": "DESIGNADA", "forca": "Audiência de Conciliação - Art. 334 CPC", "cnj": "0002155-12.2026.8.26.0001", "cliente": "ENEL DISTRIBUIÇÃO", "polo": "Réu", "dataAto": "2026-11-11", "dataHora": "11/11/2026 14:00", "dataConsumo": "2026-11-03", "isTardia": false, "hearing": "Designada", "local": "Telepresencial (Teams)", "vara": "1ª Vara Cível de Santana", "texto": "Designo sessão virtual pelo Teams em 11/11/2026 às 14:00 horas.", "status": "DESIGNADA", "validacao": "Pendente", "contexto": "Audiência designada identificada no tribunal 1ª Vara Cível de Santana.", "regra": "Detecção de designação/realização de ato solene com intimação das partes."}, {"id": "AUD-12", "tipo": "AUDIENCIA", "tipoLabel": "Audiência", "subtipo": "DESIGNADA", "forca": "Audiência de Instrução e Julgamento", "cnj": "3171425-52.2026.8.04.1000", "cliente": "ENTER VOLKSWAGEN", "polo": "Réu", "dataAto": "2026-12-17", "dataHora": "17/12/2026 11:30", "dataConsumo": "2026-11-03", "isTardia": false, "hearing": "Designada", "local": "Juizado Especial de Coari", "vara": "Comarca de Coari - AM", "texto": "Designo audiência de instrução telepresencial para 17/12/2026 às 11:30 horas.", "status": "DESIGNADA", "validacao": "Pendente", "contexto": "Audiência designada identificada no tribunal Comarca de Coari - AM.", "regra": "Detecção de designação/realização de ato solene com intimação das partes."}, {"id": "AUD-13", "tipo": "AUDIENCIA", "tipoLabel": "Audiência", "subtipo": "REALIZADA", "forca": "Audiência de Conciliação", "cnj": "0001024-88.2026.8.26.0100", "cliente": "CARTEIRA ALFA", "polo": "Réu", "dataAto": "2026-10-22", "dataHora": "22/10/2026 10:30", "dataConsumo": "2026-11-03", "isTardia": false, "hearing": "Designada", "local": "14ª Vara Cível Central", "vara": "Foro Central Cível de SP", "texto": "Termo de conciliação juntado. Sem acordo. Aberto prazo para réplica.", "status": "REALIZADA", "validacao": "Pendente", "contexto": "Audiência realizada identificada no tribunal Foro Central Cível de SP.", "regra": "Detecção de designação/realização de ato solene com intimação das partes."}, {"id": "AUD-14", "tipo": "AUDIENCIA", "tipoLabel": "Audiência", "subtipo": "DESIGNADA", "forca": "Audiência de Instrução e Julgamento", "cnj": "4139407-36.2026.8.26.0100", "cliente": "BANCO SANTANDER", "polo": "Réu", "dataAto": "2027-01-19", "dataHora": "19/01/2027 14:30", "dataConsumo": "2026-11-03", "isTardia": false, "hearing": "Designada", "local": "32ª Vara Cível Central", "vara": "Foro Central Cível de SP", "texto": "Em razão do recesso forense, designo instrução para o dia 19 de janeiro de 2027 às 14:30 horas.", "status": "DESIGNADA", "validacao": "Pendente", "contexto": "Audiência designada identificada no tribunal Foro Central Cível de SP.", "regra": "Detecção de designação/realização de ato solene com intimação das partes."}, {"id": "AUD-15", "tipo": "AUDIENCIA", "tipoLabel": "Audiência", "subtipo": "DESIGNADA", "forca": "Audiência de Instrução e Julgamento", "cnj": "7064266-74.2026.8.22.0001", "cliente": "ENTER VOLKSWAGEN", "polo": "Réu", "dataAto": "2027-01-26", "dataHora": "26/01/2027 10:00", "dataConsumo": "2026-11-03", "isTardia": false, "hearing": "Designada", "local": "2ª Vara Cível de Porto Velho", "vara": "Tribunal de Justiça de Rondônia - TJRO", "texto": "Intimem-se o perito do juízo e os assistentes técnicos para comparecerem em 26/01/2027 às 10h.", "status": "DESIGNADA", "validacao": "Pendente", "contexto": "Audiência designada identificada no tribunal Tribunal de Justiça de Rondônia - TJRO.", "regra": "Detecção de designação/realização de ato solene com intimação das partes."}];
+    let cadastros = [{"id": "CAD-01", "cnj": "4139407-36.2026.8.26.0100", "cliente": "BANCO SANTANDER", "polo": "Réu", "controle": "SAN-2026-9901", "modo": "Consulta + Mon", "indicativos": ["CIT", "AUD"], "status": "Concluído", "dataInsercao": "03/11/2026 10:48", "solicitante": "Larissa Silva"}, {"id": "CAD-02", "cnj": "0700441-93.2026.8.02.0034", "cliente": "ENTER VOLKSWAGEN", "polo": "Réu", "controle": "VW-BR-4412", "modo": "Consulta + Mon", "indicativos": ["CAPA", "CIT", "AUD"], "status": "Concluído", "dataInsercao": "03/11/2026 10:47", "solicitante": "Larissa Silva"}, {"id": "CAD-03", "cnj": "4042015-05.2026.8.26.0001", "cliente": "ENTER VOLKSWAGEN", "polo": "Réu", "controle": "VW-BR-4042", "modo": "Consulta + Mon", "indicativos": ["CAPA", "CIT", "AUD"], "status": "Concluído", "dataInsercao": "03/11/2026 10:47", "solicitante": "Larissa Silva"}, {"id": "CAD-04", "cnj": "7064266-74.2026.8.22.0001", "cliente": "ENTER VOLKSWAGEN", "polo": "Réu", "controle": "VW-RO-7064", "modo": "Consulta + Mon", "indicativos": ["CAPA", "CIT", "AUD"], "status": "Concluído", "dataInsercao": "03/11/2026 10:47", "solicitante": "Larissa Silva"}, {"id": "CAD-05", "cnj": "4032933-41.2026.8.26.0003", "cliente": "ENTER BMG", "polo": "Réu", "controle": "BMG-SP-4032", "modo": "Consulta + Mon", "indicativos": ["CIT", "AUD"], "status": "Concluído", "dataInsercao": "03/11/2026 10:46", "solicitante": "Larissa Silva"}, {"id": "CAD-06", "cnj": "4025193-04.2026.8.26.0562", "cliente": "ENTER VOLKSWAGEN", "polo": "Réu", "controle": "VW-STS-4025", "modo": "Só Monitorar", "indicativos": ["CIT"], "status": "Concluído", "dataInsercao": "03/11/2026 10:18", "solicitante": "Larissa Silva"}, {"id": "CAD-07", "cnj": "0001512-68.2026.8.05.0106", "cliente": "ENTER VOLKSWAGEN", "polo": "Réu", "controle": "VW-BA-1512", "modo": "Consulta + Mon", "indicativos": ["CAPA", "CIT", "AUD"], "status": "Concluído", "dataInsercao": "03/11/2026 09:30", "solicitante": "Lucas Ferreira"}, {"id": "CAD-08", "cnj": "3001316-61.2026.8.06.6171", "cliente": "ENTER BMG", "polo": "Réu", "controle": "BMG-CE-3001", "modo": "Consulta + Mon", "indicativos": ["CIT", "AUD"], "status": "Concluído", "dataInsercao": "03/11/2026 09:15", "solicitante": "Lucas Ferreira"}, {"id": "CAD-09", "cnj": "0042189-44.2026.8.26.0100", "cliente": "SANTANDER BRASIL", "polo": "Réu", "controle": "SAN-SP-4218", "modo": "Consulta + Mon", "indicativos": ["CIT", "AUD"], "status": "Concluído", "dataInsercao": "02/11/2026 17:40", "solicitante": "Larissa Silva"}, {"id": "CAD-10", "cnj": "5048472-53.2026.8.21.0008", "cliente": "ENTER VOLKSWAGEN", "polo": "Réu", "controle": "VW-RS-5048", "modo": "Consulta + Mon", "indicativos": ["CIT", "AUD"], "status": "Concluído", "dataInsercao": "02/11/2026 16:22", "solicitante": "Larissa Silva"}, {"id": "CAD-11", "cnj": "0003412-88.2026.8.19.0001", "cliente": "BANCO PAN", "polo": "Réu", "controle": "PAN-RJ-3412", "modo": "Consulta Única", "indicativos": ["CIT"], "status": "Concluído", "dataInsercao": "02/11/2026 15:10", "solicitante": "Lucas Ferreira"}, {"id": "CAD-12", "cnj": "1002341-90.2026.8.26.0002", "cliente": "CLARO BRASIL", "polo": "Réu", "controle": "CLA-SP-1002", "modo": "Consulta + Mon", "indicativos": ["CIT", "AUD"], "status": "Concluído", "dataInsercao": "02/11/2026 14:05", "solicitante": "Lucas Ferreira"}];
+    let monitoramento = [{"id": "MON-01", "cnj": "4139407-36.2026.8.26.0100", "cliente": "BANCO SANTANDER", "tribunal": "TJSP (1ª Instância)", "modo": "Consulta + Mon", "indCit": true, "indAud": true, "citValidada": "Pendente", "audValidada": "Pendente", "dataAtivacao": "03/11/2026 10:48", "status": "Ativo", "ultimaVarredura": "Hoje, 14:20"}, {"id": "MON-02", "cnj": "0700441-93.2026.8.02.0034", "cliente": "ENTER VOLKSWAGEN", "tribunal": "TJAL (Comarcas)", "modo": "Consulta + Mon", "indCit": true, "indAud": true, "citValidada": "Pendente", "audValidada": "Pendente", "dataAtivacao": "03/11/2026 10:47", "status": "Ativo", "ultimaVarredura": "Hoje, 14:15"}, {"id": "MON-03", "cnj": "4042015-05.2026.8.26.0001", "cliente": "ENTER VOLKSWAGEN", "tribunal": "TJSP (Foro Central)", "modo": "Consulta + Mon", "indCit": true, "indAud": true, "citValidada": "Pendente", "audValidada": "Pendente", "dataAtivacao": "03/11/2026 10:47", "status": "Ativo", "ultimaVarredura": "Hoje, 14:10"}, {"id": "MON-04", "cnj": "7064266-74.2026.8.22.0001", "cliente": "ENTER VOLKSWAGEN", "tribunal": "TJRO (Porto Velho)", "modo": "Consulta + Mon", "indCit": true, "indAud": true, "citValidada": "Pendente", "audValidada": "Pendente", "dataAtivacao": "03/11/2026 10:47", "status": "Ativo", "ultimaVarredura": "Hoje, 14:05"}, {"id": "MON-05", "cnj": "4032933-41.2026.8.26.0003", "cliente": "ENTER BMG", "tribunal": "TJSP (Jabaquara)", "modo": "Consulta + Mon", "indCit": true, "indAud": true, "citValidada": "Pendente", "audValidada": "Pendente", "dataAtivacao": "03/11/2026 10:46", "status": "Ativo", "ultimaVarredura": "Hoje, 13:58"}, {"id": "MON-06", "cnj": "4025193-04.2026.8.26.0562", "cliente": "ENTER VOLKSWAGEN", "tribunal": "TJSP (Santos)", "modo": "Só Monitorar", "indCit": true, "indAud": false, "citValidada": "Pendente", "audValidada": "-", "dataAtivacao": "03/11/2026 10:18", "status": "Ativo", "ultimaVarredura": "Hoje, 13:50"}, {"id": "MON-07", "cnj": "0001512-68.2026.8.05.0106", "cliente": "ENTER VOLKSWAGEN", "tribunal": "TJBA (Dias d'Ávila)", "modo": "Consulta + Mon", "indCit": true, "indAud": true, "citValidada": "Pendente", "audValidada": "Pendente", "dataAtivacao": "03/11/2026 09:30", "status": "Ativo", "ultimaVarredura": "Hoje, 13:40"}, {"id": "MON-08", "cnj": "3001316-61.2026.8.06.6171", "cliente": "ENTER BMG", "tribunal": "TJCE (Tauá)", "modo": "Consulta + Mon", "indCit": true, "indAud": true, "citValidada": "Pendente", "audValidada": "Pendente", "dataAtivacao": "03/11/2026 09:15", "status": "Ativo", "ultimaVarredura": "Hoje, 13:30"}, {"id": "MON-09", "cnj": "0042189-44.2026.8.26.0100", "cliente": "SANTANDER BRASIL", "tribunal": "TJSP (João Mendes)", "modo": "Consulta + Mon", "indCit": true, "indAud": true, "citValidada": "Pendente", "audValidada": "Pendente", "dataAtivacao": "02/11/2026 17:40", "status": "Ativo", "ultimaVarredura": "Hoje, 13:20"}, {"id": "MON-10", "cnj": "5048472-53.2026.8.21.0008", "cliente": "ENTER VOLKSWAGEN", "tribunal": "TJRS (Canoas)", "modo": "Consulta + Mon", "indCit": true, "indAud": true, "citValidada": "Pendente", "audValidada": "Pendente", "dataAtivacao": "02/11/2026 16:22", "status": "Ativo", "ultimaVarredura": "Hoje, 13:00"}];
+    let relatorios = [{"id": "REL-00", "data": "Hoje, 15:25", "solicitante": "Lucas Ferreira", "tipo": "Consolidado (Citações + Audiências)", "status": "Processando", "progresso": 72, "itens": "43", "arquivo": "indicativos_consolidados_2026-11-03_15-25.xlsx", "tamanho": "48 KB"}, {"id": "REL-01", "data": "30/10/2026 15:55", "solicitante": "Larissa Silva", "tipo": "Audiências", "status": "Finalizado", "progresso": 100, "itens": "3.513", "arquivo": "audiencias_2026-10-30_18-55.xlsx", "tamanho": "1.2 MB"}, {"id": "REL-02", "data": "30/10/2026 15:54", "solicitante": "Larissa Silva", "tipo": "Audiências", "status": "Finalizado", "progresso": 100, "itens": "3.513", "arquivo": "audiencias_2026_10_30_18_54.xlsx", "tamanho": "1.2 MB"}, {"id": "REL-03", "data": "22/10/2026 16:52", "solicitante": "FC", "tipo": "Citações", "status": "Finalizado", "progresso": 100, "itens": "32.171", "arquivo": "citacoes_2026-10-22_19-52.xlsx", "tamanho": "8.4 MB"}, {"id": "REL-04", "data": "22/10/2026 13:43", "solicitante": "FC", "tipo": "Audiências", "status": "Finalizado", "progresso": 100, "itens": "2.845", "arquivo": "audiencias_2026-10-22_16-43.xlsx", "tamanho": "980 KB"}, {"id": "REL-05", "data": "22/10/2026 13:41", "solicitante": "FC", "tipo": "Citações", "status": "Finalizado", "progresso": 100, "itens": "31.832", "arquivo": "citacoes_2026-10-22_16-41.xlsx", "tamanho": "8.2 MB"}, {"id": "REL-06", "data": "22/10/2026 12:51", "solicitante": "FC", "tipo": "Citações", "status": "Finalizado", "progresso": 100, "itens": "31.832", "arquivo": "citacoes_2026-10-22_15-51.xlsx", "tamanho": "8.2 MB"}, {"id": "REL-07", "data": "22/10/2026 12:37", "solicitante": "FC", "tipo": "Citações", "status": "Finalizado", "progresso": 100, "itens": "31.832", "arquivo": "citacoes_2026-10-22_15-37.xlsx", "tamanho": "8.2 MB"}, {"id": "REL-08", "data": "21/10/2026 16:24", "solicitante": "FC", "tipo": "Audiências", "status": "Finalizado", "progresso": 100, "itens": "2.754", "arquivo": "audiencias_2026-10-21_19-24.xlsx", "tamanho": "920 KB"}, {"id": "REL-09", "data": "21/10/2026 16:22", "solicitante": "FC", "tipo": "Citações", "status": "Finalizado", "progresso": 100, "itens": "166", "arquivo": "citacoes_2026_10_21_19_22.xlsx", "tamanho": "94 KB"}, {"id": "REL-10", "data": "21/10/2026 16:20", "solicitante": "FC", "tipo": "Citações", "status": "Finalizado", "progresso": 100, "itens": "31.494", "arquivo": "citacoes_2026-10-21_19-20.xlsx", "tamanho": "8.1 MB"}];
+
+    let currentView = 'central';
+
+    function showToast(msg) {
+      const c = $('toastContainer');
+      if (!c) return;
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.innerHTML = `<span>${msg}</span>`;
+      c.appendChild(t);
+      setTimeout(() => {
+        t.style.opacity = '0';
+        t.style.transform = 'translateY(10px) scale(0.96)';
+        t.style.transition = 'all 0.22s var(--ease-apple)';
+        setTimeout(() => t.remove(), 220);
+      }, 3600);
+    }
+
+    function showView(viewId) {
+      currentView = viewId;
+      document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+
+      const sec = $('view-' + viewId);
+      if (sec) sec.classList.add('active');
+
+      const nav = $('nav-' + viewId);
+      if (nav) nav.classList.add('active');
+
+      if (viewId === 'central') renderFeedConsolidado();
+      if (viewId === 'relatorios') renderRelatorios();
+      if (viewId === 'cadastros') renderCadastros();
+      if (viewId === 'monitoramento') renderMonitoramento();
+    }
+
+    function toggleSidebar() {
+      const sb = $('sidebar');
+      if (!sb) return;
+      sb.classList.toggle('collapsed');
+      localStorage.setItem('jurify_sidebar_collapsed', sb.classList.contains('collapsed'));
+    }
+
+    if (localStorage.getItem('jurify_sidebar_collapsed') === 'true') {
+      const sb = $('sidebar');
+      if (sb) sb.classList.add('collapsed');
+    }
+
+    let currentFeedStream = 'TODOS'; // 'TODOS' | 'CITACAO' | 'AUDIENCIA'
+    let currentFeedStatus = 'ALL';   // 'ALL' | 'PENDENTE' | 'VALIDADOS'
+
+    function switchStreamTab(stream) {
+      currentFeedStream = stream;
+      ['TODOS', 'CITACAO', 'AUDIENCIA'].forEach(s => {
+        const tab = $('streamTab-' + s);
+        if (tab) tab.classList.toggle('active', s === stream);
+      });
+
+      // Atualizar Cards de KPI do Topo com métricas do contexto ativo
+      atualizarKpisPorAba(stream);
+      renderFeedConsolidado();
+    }
+
+    function setStatusFilter(status) {
+      currentFeedStatus = status;
+      ['ALL', 'PENDENTE', 'VALIDADOS'].forEach(s => {
+        const pill = $('seg-status-' + s);
+        if (pill) pill.classList.toggle('active', s === status);
+      });
+      renderFeedConsolidado();
+    }
+
+    function atualizarKpisPorAba(stream) {
+      const card1Title = $('kpiFeedTotal').previousElementSibling;
+      const card1Sub = $('kpiFeedTotal').nextElementSibling;
+      const card2Header = $('kpiFeedCitacoes').previousElementSibling;
+      const card2Sub = $('kpiFeedCitacoes').nextElementSibling;
+      const card3Header = $('kpiFeedAudiencias').previousElementSibling;
+      const card3Sub = $('kpiFeedAudiencias').nextElementSibling;
+      const card4Header = $('kpiFeedPendentes').previousElementSibling;
+      const card4Sub = $('kpiFeedPendentes').nextElementSibling;
+
+      if (stream === 'CITACAO') {
+        const citTotal = unifiedFeed.filter(x => x.tipo === 'CITACAO').length;
+        const citFortes = unifiedFeed.filter(x => x.tipo === 'CITACAO' && x.subtipo === 'FORTE').length;
+        const citMedias = citTotal - citFortes;
+        const citPend = unifiedFeed.filter(x => x.tipo === 'CITACAO' && x.validacao === 'Pendente').length;
+
+        card1Title.textContent = 'TOTAL DE CITAÇÕES';
+        $('kpiFeedTotal').textContent = citTotal;
+        card1Sub.textContent = 'Capturadas no lote diário';
+
+        card2Header.innerHTML = '<span>INDICATIVOS FORTES</span><span class="micro-dot dot-citacao"></span>';
+        $('kpiFeedCitacoes').textContent = citFortes;
+        card2Sub.textContent = 'Risco iminente de revelia';
+
+        card3Header.innerHTML = '<span>MÉDIAS E FRACAS</span>';
+        $('kpiFeedAudiencias').textContent = citMedias;
+        $('kpiFeedAudiencias').style.color = '#475569';
+        card3Sub.textContent = 'Menções e avisos em diário';
+
+        card4Header.textContent = 'CITAÇÕES PENDENTES';
+        $('kpiFeedPendentes').textContent = citPend;
+        card4Sub.textContent = 'Aguardando conferência';
+
+      } else if (stream === 'AUDIENCIA') {
+        const audTotal = unifiedFeed.filter(x => x.tipo === 'AUDIENCIA').length;
+        const audDesig = unifiedFeed.filter(x => x.tipo === 'AUDIENCIA' && x.subtipo === 'DESIGNADA').length;
+        const audReal = audTotal - audDesig;
+        const audPend = unifiedFeed.filter(x => x.tipo === 'AUDIENCIA' && x.validacao === 'Pendente').length;
+
+        card1Title.textContent = 'TOTAL DE AUDIÊNCIAS';
+        $('kpiFeedTotal').textContent = audTotal;
+        card1Sub.textContent = 'Pautas no radar dos robôs';
+
+        card2Header.innerHTML = '<span>DESIGNADAS</span><span class="micro-dot dot-audiencia"></span>';
+        $('kpiFeedCitacoes').textContent = audDesig;
+        card2Sub.textContent = 'Pautas futuras ativas';
+
+        card3Header.innerHTML = '<span>REALIZADAS</span>';
+        $('kpiFeedAudiencias').textContent = audReal;
+        $('kpiFeedAudiencias').style.color = 'var(--brand-blue)';
+        card3Sub.textContent = 'Ocorridas com termo nos autos';
+
+        card4Header.textContent = 'AUDIÊNCIAS PENDENTES';
+        $('kpiFeedPendentes').textContent = audPend;
+        card4Sub.textContent = 'Aguardando validação da pauta';
+
+      } else {
+        // Lote Consolidado
+        const total = unifiedFeed.length;
+        const citCount = unifiedFeed.filter(x => x.tipo === 'CITACAO').length;
+        const audCount = unifiedFeed.filter(x => x.tipo === 'AUDIENCIA').length;
+        const pendCount = unifiedFeed.filter(x => x.validacao === 'Pendente').length;
+
+        card1Title.textContent = 'TOTAL NO LOTE';
+        $('kpiFeedTotal').textContent = total;
+        card1Sub.textContent = 'Indicativos identificados hoje';
+
+        card2Header.innerHTML = '<span>CITAÇÕES DO DIA</span><span class="micro-dot dot-citacao"></span>';
+        $('kpiFeedCitacoes').textContent = citCount;
+        $('kpiFeedCitacoes').style.color = '#065f46';
+        card2Sub.textContent = '10 fortes · 18 médias/fracas';
+
+        card3Header.innerHTML = '<span>AUDIÊNCIAS</span><span class="micro-dot dot-audiencia"></span>';
+        $('kpiFeedAudiencias').textContent = audCount;
+        $('kpiFeedAudiencias').style.color = 'var(--brand-blue)';
+        card3Sub.textContent = '11 designadas · 4 realizadas';
+
+        card4Header.textContent = 'PENDENTES DE TRIAGEM';
+        $('kpiFeedPendentes').textContent = pendCount;
+        card4Sub.textContent = 'Aguardando conferência da equipe';
+      }
+    }
+
+    function renderFeedConsolidado() {
+      const thead = $('theadFeedConsolidado');
+      const tbody = $('tbodyFeedConsolidado');
+      const q = ($('searchFeed').value || '').trim().toLowerCase();
+      const cli = $('filterClienteFeed').value;
+
+      // 1. Montar Cabeçalho Dinâmico sem Coluna Validação CRM (Ações com Espaço Generoso)
+      if (currentFeedStream === 'CITACAO') {
+        thead.innerHTML = `
+          <tr>
+            <th class="col-cit-cnj">Número do Processo</th>
+            <th class="col-cit-cli">Cliente / Pólo</th>
+            <th class="col-cit-forca">Força do Indicativo</th>
+            <th class="col-cit-mov">Data Movimentação</th>
+            <th class="col-cit-cons">Data Consumo</th>
+            <th class="col-cit-act">Ações</th>
+          </tr>
+        `;
+      } else if (currentFeedStream === 'AUDIENCIA') {
+        thead.innerHTML = `
+          <tr>
+            <th class="col-aud-cnj">Número do Processo</th>
+            <th class="col-aud-cli">Cliente / Pólo</th>
+            <th class="col-aud-data">Data e Horário</th>
+            <th class="col-aud-local">Local / Vara</th>
+            <th class="col-aud-tipo">Tipo de Audiência</th>
+            <th class="col-aud-act">Ações</th>
+          </tr>
+        `;
+      } else {
+        // Lote Consolidado
+        thead.innerHTML = `
+          <tr>
+            <th class="col-uni-cnj">Número do Processo</th>
+            <th class="col-uni-cli">Cliente / Pólo</th>
+            <th class="col-uni-tipo">Tipo de Indicativo</th>
+            <th class="col-uni-data">Data do Ato</th>
+            <th class="col-uni-local">Local / Foro</th>
+            <th class="col-uni-act">Ações</th>
+          </tr>
+        `;
+      }
+
+      // 2. Filtrar Dados
+      const filtered = unifiedFeed.filter(item => {
+        if (currentFeedStream === 'CITACAO' && item.tipo !== 'CITACAO') return false;
+        if (currentFeedStream === 'AUDIENCIA' && item.tipo !== 'AUDIENCIA') return false;
+        if (currentFeedStatus === 'PENDENTE' && item.validacao !== 'Pendente') return false;
+        if (currentFeedStatus === 'VALIDADOS' && !['Válido', 'Aprovada'].includes(item.validacao)) return false;
+        if (cli && item.cliente !== cli) return false;
+        if (q) {
+          const txt = (item.cnj + ' ' + item.cliente + ' ' + (item.texto || '') + ' ' + (item.local || '') + ' ' + (item.forca || '')).toLowerCase();
+          if (!txt.includes(q)) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="empty-state">Nenhum indicativo encontrado para os filtros selecionados.</td></tr>`;
+        atualizarContadoresFeed();
+        return;
+      }
+
+      // 3. Renderizar Linhas
+      tbody.innerHTML = filtered.map(item => {
+        const isCit = item.tipo === 'CITACAO';
+        const rowClass = isCit ? 'row-citacao' : 'row-audiencia';
+        const isPendente = item.validacao === 'Pendente';
+        const isValidado = ['Válido', 'Aprovada'].includes(item.validacao);
+        const isDescartado = ['Inválido', 'Rejeitada'].includes(item.validacao);
+
+        // Bloco de Ações Integrado (Substitui Validação CRM com Elegância)
+        let actionCellHtml = '';
+        if (isPendente) {
+          actionCellHtml = `
+            <div style="display: inline-flex; align-items: center; justify-content: flex-end; gap: 4px; width: 100%;">
+              <button class="btn btn-secondary btn-icon" title="Validar / Confirmar Indicativo" onclick="validarItemRapido('${item.id}')">
+                <svg class="j-icon j-icon-sm" style="color: #166534;"><use href="#feedback-valido"/></svg>
+              </button>
+              <button class="btn btn-secondary btn-icon" title="Descartar Indicativo" onclick="descartarItemRapido('${item.id}')">
+                <svg class="j-icon j-icon-sm" style="color: #b91c1c;"><use href="#feedback-invalido"/></svg>
+              </button>
+              <button class="btn btn-secondary btn-sm" onclick="abrirDrawerAdaptativo('${item.id}')">
+                <svg class="j-icon j-icon-sm"><use href="#ver-evidencia"/></svg>
+                Ver
+              </button>
+            </div>
+          `;
+        } else if (isValidado) {
+          actionCellHtml = `
+            <div style="display: inline-flex; align-items: center; justify-content: flex-end; gap: 6px; width: 100%;">
+              <span class="status-badge-inline validado">
+                <svg class="j-icon j-icon-xs" style="color: #166534;"><use href="#feedback-valido"/></svg>
+                Validado
+              </span>
+              <button class="btn btn-secondary btn-sm" onclick="abrirDrawerAdaptativo('${item.id}')">
+                <svg class="j-icon j-icon-sm"><use href="#ver-evidencia"/></svg>
+                Ver
+              </button>
+            </div>
+          `;
+        } else {
+          actionCellHtml = `
+            <div style="display: inline-flex; align-items: center; justify-content: flex-end; gap: 6px; width: 100%;">
+              <span class="status-badge-inline descartado">
+                Descartado
+              </span>
+              <button class="btn btn-secondary btn-sm" onclick="abrirDrawerAdaptativo('${item.id}')">
+                <svg class="j-icon j-icon-sm"><use href="#ver-evidencia"/></svg>
+                Ver
+              </button>
+            </div>
+          `;
+        }
+
+        // Layout Adaptativo por Aba
+        if (currentFeedStream === 'CITACAO') {
+          const nivelNorm = (item.subtipo || 'FORTE').toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+          const nivelLabel = item.subtipo === 'FORTE' ? 'Forte' : (item.subtipo === 'MÉDIO' ? 'Médio' : 'Fraco');
+          const tardia = item.isTardia ? `<span class="tardia-indicator">(tardia)</span>` : '';
+
+          return `
+            <tr class="${rowClass}">
+              <td class="col-cit-cnj">
+                <div class="cnj-cell">
+                  <span class="font-mono">${item.cnj}</span>
+                  <button class="copy-btn" onclick="copiarCnj('${item.cnj}')" title="Copiar CNJ">
+                    <svg class="j-icon j-icon-sm"><use href="#copiar-cnj"/></svg>
+                  </button>
+                </div>
+              </td>
+              <td class="col-cit-cli" title="${item.cliente}">
+                <div style="font-weight: 600;">${item.cliente}</div>
+                <div style="font-size: 11px; color: var(--text-muted);">${item.polo || 'Réu'}</div>
+              </td>
+              <td class="col-cit-forca">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="badge-tipo badge-citacao">
+                    <svg class="j-icon j-icon-sm"><use href="#citacao"/></svg>
+                    Citação
+                  </span>
+                  <span class="tag-quiet tag-${nivelNorm}">${nivelLabel}</span>
+                </div>
+                <div class="subtext-indicativo">Leitura / Mandado de Defesa</div>
+              </td>
+              <td class="col-cit-mov">
+                <div class="font-mono" style="font-weight: 600; color: var(--text-main);">${formatarDataBr(item.dataAto)}${tardia}</div>
+                <div class="subtext-indicativo">Publicação Judicial</div>
+              </td>
+              <td class="col-cit-cons">
+                <div class="font-mono" style="color: var(--text-secondary);">${formatarDataBr(item.dataConsumo)}</div>
+                <div class="subtext-indicativo font-mono">Consumo Robô</div>
+              </td>
+              <td class="col-cit-act">${actionCellHtml}</td>
+            </tr>
+          `;
+        } else if (currentFeedStream === 'AUDIENCIA') {
+          const isDesignada = item.subtipo === 'DESIGNADA';
+          const statTag = isDesignada ? '<span class="tag-quiet tag-designada">Designada</span>' : '<span class="tag-quiet tag-realizada">Realizada</span>';
+          const parts = (item.dataHora || '20/10/2026 14:00').split(' ');
+          const dataStr = parts[0] || '20/10/2026';
+          const horaStr = parts[1] || '14:00';
+
+          return `
+            <tr class="${rowClass}">
+              <td class="col-aud-cnj">
+                <div class="cnj-cell">
+                  <span class="font-mono">${item.cnj}</span>
+                  <button class="copy-btn" onclick="copiarCnj('${item.cnj}')" title="Copiar CNJ">
+                    <svg class="j-icon j-icon-sm"><use href="#copiar-cnj"/></svg>
+                  </button>
+                </div>
+              </td>
+              <td class="col-aud-cli" title="${item.cliente}">
+                <div style="font-weight: 600;">${item.cliente}</div>
+                <div style="font-size: 11px; color: var(--text-muted);">${item.polo || 'Autor'}</div>
+              </td>
+              <td class="col-aud-data">
+                <div class="calendar-chip">
+                  <span class="cal-chip-date">${dataStr}</span>
+                  <span class="cal-chip-time font-mono">${horaStr}</span>
+                </div>
+              </td>
+              <td class="col-aud-local" title="${item.local}">${item.local}</td>
+              <td class="col-aud-tipo">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="badge-tipo badge-audiencia">
+                    <svg class="j-icon j-icon-sm"><use href="#audiencia"/></svg>
+                    Audiência
+                  </span>
+                  ${statTag}
+                </div>
+                <div class="subtext-indicativo font-semibold" style="color: #1e3a8a;">${item.forca || 'Sessão Judicial'}</div>
+              </td>
+              <td class="col-aud-act">${actionCellHtml}</td>
+            </tr>
+          `;
+        } else {
+          // Lote Consolidado
+          let tipoBadgeHtml = '';
+          if (isCit) {
+            const nivelNorm = (item.subtipo || 'FORTE').toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+            const nivelLabel = item.subtipo === 'FORTE' ? 'Forte' : (item.subtipo === 'MÉDIO' ? 'Médio' : 'Fraco');
+            tipoBadgeHtml = `
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="badge-tipo badge-citacao">
+                  <svg class="j-icon j-icon-sm"><use href="#citacao"/></svg>
+                  Citação
+                </span>
+                <span class="tag-quiet tag-${nivelNorm}">${nivelLabel}</span>
+              </div>
+              <div class="subtext-indicativo">Leitura / Mandado de Defesa</div>
+            `;
+          } else {
+            const isDesignada = item.subtipo === 'DESIGNADA';
+            const statTag = isDesignada ? '<span class="tag-quiet tag-designada">Designada</span>' : '<span class="tag-quiet tag-realizada">Realizada</span>';
+            tipoBadgeHtml = `
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="badge-tipo badge-audiencia">
+                  <svg class="j-icon j-icon-sm"><use href="#audiencia"/></svg>
+                  Audiência
+                </span>
+                ${statTag}
+              </div>
+              <div class="subtext-indicativo font-semibold" style="color: #1e3a8a;">${item.forca || 'Sessão Judicial'}</div>
+            `;
+          }
+
+          let dataAtoHtml = '';
+          if (isCit) {
+            const tardia = item.isTardia ? `<span class="tardia-indicator">(tardia)</span>` : '';
+            dataAtoHtml = `
+              <div class="font-mono" style="font-weight: 600; color: var(--text-main);">${formatarDataBr(item.dataAto)}${tardia}</div>
+              <div class="subtext-indicativo font-mono">Consumo: ${formatarDataBr(item.dataConsumo)}</div>
+            `;
+          } else {
+            const parts = (item.dataHora || '20/10/2026 14:00').split(' ');
+            const dataStr = parts[0] || '20/10/2026';
+            const horaStr = parts[1] || '14:00';
+            dataAtoHtml = `
+              <div class="calendar-chip">
+                <span class="cal-chip-date">${dataStr}</span>
+                <span class="cal-chip-time font-mono">${horaStr}</span>
+              </div>
+              <div class="subtext-indicativo" style="color: var(--brand-blue); font-weight: 500;">Pauta Marcada</div>
+            `;
+          }
+
+          return `
+            <tr class="${rowClass}">
+              <td class="col-uni-cnj">
+                <div class="cnj-cell">
+                  <span class="font-mono">${item.cnj}</span>
+                  <button class="copy-btn" onclick="copiarCnj('${item.cnj}')" title="Copiar CNJ">
+                    <svg class="j-icon j-icon-sm"><use href="#copiar-cnj"/></svg>
+                  </button>
+                </div>
+              </td>
+              <td class="col-uni-cli" title="${item.cliente}">
+                <div style="font-weight: 600;">${item.cliente}</div>
+                <div style="font-size: 11px; color: var(--text-muted);">${item.polo || 'Réu'}</div>
+              </td>
+              <td class="col-uni-tipo">${tipoBadgeHtml}</td>
+              <td class="col-uni-data">${dataAtoHtml}</td>
+              <td class="col-uni-local" title="${item.local}">${item.local}</td>
+              <td class="col-uni-act">${actionCellHtml}</td>
+            </tr>
+          `;
+        }
+      }).join('');
+
+      atualizarContadoresFeed();
+    }
+
+    function atualizarContadoresFeed() {
+      const totalGlobal = unifiedFeed.length;
+      const citGlobal = unifiedFeed.filter(x => x.tipo === 'CITACAO').length;
+      const audGlobal = unifiedFeed.filter(x => x.tipo === 'AUDIENCIA').length;
+
+      if ($('badge-stream-todos')) $('badge-stream-todos').textContent = totalGlobal;
+      if ($('badge-stream-cit')) $('badge-stream-cit').textContent = citGlobal;
+      if ($('badge-stream-aud')) $('badge-stream-aud').textContent = audGlobal;
+
+      // Contadores relativos ao Stream Ativo para os status pills
+      const streamItems = unifiedFeed.filter(x => {
+        if (currentFeedStream === 'CITACAO') return x.tipo === 'CITACAO';
+        if (currentFeedStream === 'AUDIENCIA') return x.tipo === 'AUDIENCIA';
+        return true;
+      });
+
+      const sTotal = streamItems.length;
+      const sPend = streamItems.filter(x => x.validacao === 'Pendente').length;
+      const sVal = sTotal - sPend;
+
+      if ($('count-status-all')) $('count-status-all').textContent = sTotal;
+      if ($('count-status-pend')) $('count-status-pend').textContent = sPend;
+      if ($('count-status-val')) $('count-status-val').textContent = sVal;
+    }
+
+    function validarItemRapido(id) {
+      const item = unifiedFeed.find(x => x.id === id);
+      if (item) {
+        item.validacao = item.tipo === 'CITACAO' ? 'Válido' : 'Aprovada';
+        showToast(`${item.tipoLabel} validada com sucesso!`);
+        renderFeedConsolidado();
+      }
+    }
+
+    function descartarItemRapido(id) {
+      const item = unifiedFeed.find(x => x.id === id);
+      if (item) {
+        item.validacao = item.tipo === 'CITACAO' ? 'Inválido' : 'Rejeitada';
+        showToast(`${item.tipoLabel} descartada da esteira.`);
+        renderFeedConsolidado();
+      }
+    }
+
+    // DRAWER ADAPTATIVO
+    function abrirDrawerAdaptativo(id) {
+      activeFeedItemId = id;
+      const item = unifiedFeed.find(x => x.id === id);
+      if (!item) return;
+
+      const isCit = item.tipo === 'CITACAO';
+      $('drawerEyebrow').textContent = isCit ? 'DETALHES DA CITAÇÃO' : 'DETALHES DA AUDIÊNCIA';
+      $('drawerCnj').textContent = item.cnj;
+      $('drawerCli').textContent = item.cliente;
+      $('drawerPolo').textContent = item.polo || 'Réu';
+      $('drawerLocal').textContent = item.local;
+      $('drawerStatusVal').textContent = item.validacao;
+      $('drawerTexto').textContent = item.texto || 'Sem texto disponível';
+      $('drawerRegra').textContent = item.regra || '-';
+      $('drawerContexto').textContent = item.contexto || '-';
+
+      if (isCit) {
+        $('drawerTipoBadge').innerHTML = `<span class="badge-tipo badge-citacao"><svg class="j-icon j-icon-sm"><use href="#citacao"/></svg> Citação</span> <span class="tag-quiet tag-${item.subtipo.toLowerCase()}">${item.forca || item.subtipo}</span>`;
+        $('drawerDataAto').textContent = formatarDataBr(item.dataAto);
+        $('drawerBoxActionTitle').textContent = 'Validação da Citação';
+        $('drawerBoxActionDesc').textContent = 'Confirme se a evidência textual é válida para sincronização com o card do processo no CRM Max.';
+      } else {
+        $('drawerTipoBadge').innerHTML = `<span class="badge-tipo badge-audiencia"><svg class="j-icon j-icon-sm"><use href="#audiencia"/></svg> Audiência</span> <span class="tag-quiet tag-${item.subtipo.toLowerCase()}">${item.subtipo} · ${item.forca}</span>`;
+        $('drawerDataAto').textContent = item.dataHora || formatarDataBr(item.dataAto);
+        $('drawerBoxActionTitle').textContent = 'Aprovação para a Pauta de Audiências';
+        $('drawerBoxActionDesc').textContent = 'Ao aprovar, a data e horário são confirmados na pauta dos advogados responsáveis.';
+      }
+
+      $('drawerAdaptiveOverlay').classList.add('open');
+    }
+
+    function fecharDrawerAdaptativo(e) {
+      if (e && e.target !== $('drawerAdaptiveOverlay')) return;
+      $('drawerAdaptiveOverlay').classList.remove('open');
+    }
+
+    
+    function toggleScopeCardVisual(input, cardId) {
+      const card = $(cardId);
+      if (card) {
+        card.classList.toggle('has-checked', input.checked);
+      }
+    }
+
+    function abrirDrawerCadastro(id) {
+      const c = cadastros.find(x => x.id === id);
+      if (!c) return;
+
+      $('drawerEyebrow').textContent = 'DETALHES DO PROCESSO · CADASTRO';
+      $('drawerCnj').textContent = c.cnj;
+      $('drawerCli').textContent = c.cliente;
+      $('drawerPolo').textContent = c.polo || 'Réu';
+      $('drawerLocal').textContent = `Controle: ${c.controle || 'Não informado'}`;
+      $('drawerStatusVal').innerHTML = `<span class="tag-quiet tag-aprovada">Ativo no Jurify Monitor</span>`;
+      $('drawerDataAto').textContent = c.dataInsercao;
+      $('drawerTipoBadge').innerHTML = `<span class="badge-modo modo-consulta-mon">${c.modo}</span>`;
+      
+      const indsList = (c.indicativos || []).join(', ') || 'Nenhum';
+      $('drawerTextoTitle').textContent = 'Parâmetros e Indicativos Configurados';
+      $('drawerTexto').innerHTML = `Processo cadastrado para varredura contínua de: <strong>${indsList}</strong>.<br><br>Solicitante: <strong>${c.solicitante || 'Equipe Jurify'}</strong>.<br>Código de integração CRM Max: <code>${c.controle || 'ID-AUTO'}</code>.`;
+      $('drawerRegra').textContent = 'Monitoramento ativo diário às 06:00, 12:00 e 18:00 nos portais dos tribunais.';
+      $('drawerContexto').textContent = 'Ao detectar publicações ou andamentos pertinentes, os indicativos são disparados automaticamente para a Central de Indicativos.';
+
+      $('drawerBoxActionTitle').textContent = 'Gestão do Processo';
+      $('drawerBoxActionDesc').textContent = 'Ações operacionais disponíveis para este processo na esteira do Jurify Monitor:';
+      
+      const boxActions = $('drawerAdaptiveOverlay').querySelector('#dtab-visao-geral div:last-child div:last-child');
+      if (boxActions) {
+        boxActions.innerHTML = `
+          <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="showToast('Varredura pontual disparada com sucesso!'); fecharDrawerAdaptativo();">
+            <svg class="j-icon j-icon-sm"><use href="#buscar"/></svg>
+            Consultar Agora
+          </button>
+          <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="showView('central'); fecharDrawerAdaptativo();">
+            <svg class="j-icon j-icon-sm"><use href="#central-indicativos"/></svg>
+            Ver na Central
+          </button>
+        `;
+      }
+
+      $('drawerAdaptiveOverlay').classList.add('open');
+    }
+
+    function abrirDrawerMonitoramento(id) {
+      const m = monitoramento.find(x => x.id === id);
+      if (!m) return;
+
+      $('drawerEyebrow').textContent = 'ESTEIRA DE MONITORAMENTO ATIVO';
+      $('drawerCnj').textContent = m.cnj;
+      $('drawerCli').textContent = m.cliente;
+      $('drawerPolo').textContent = 'Passivo (Réu)';
+      $('drawerLocal').textContent = m.tribunal;
+      $('drawerStatusVal').innerHTML = `<span class="tag-quiet tag-aprovada">Monitorando · ${m.status}</span>`;
+      $('drawerDataAto').textContent = m.dataAtivacao || '03/11/2026';
+      $('drawerTipoBadge').innerHTML = `<span class="badge-modo modo-consulta-mon">${m.modo}</span>`;
+      
+      $('drawerTextoTitle').textContent = 'Radar de Indicativos nos Tribunais';
+      $('drawerTexto').innerHTML = `Tribunal de Origem: <strong>${m.tribunal}</strong>.<br>Última varredura concluída: <strong>${m.ultimaVarredura}</strong>.<br>Indicativo de Citação ativo: <strong>${m.indCit ? 'SIM (Detectado)' : 'Nenhum até o momento'}</strong>.<br>Indicativo de Audiência ativo: <strong>${m.indAud ? 'SIM (Pauta Identificada)' : 'Nenhum até o momento'}</strong>.`;
+      $('drawerRegra').textContent = 'Robô de Captura Jurify v2.4 (Sistemas E-SAJ, PJe e Projudi).';
+      $('drawerContexto').textContent = 'Sincronização bidirecional habilitada com o CRM Max.';
+
+      $('drawerBoxActionTitle').textContent = 'Ações da Esteira';
+      $('drawerBoxActionDesc').textContent = 'Controle do processo na fila de monitoramento:';
+      
+      const boxActions = $('drawerAdaptiveOverlay').querySelector('#dtab-visao-geral div:last-child div:last-child');
+      if (boxActions) {
+        boxActions.innerHTML = `
+          <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="showToast('Processo colocado em pausa temporária.'); fecharDrawerAdaptativo();">
+            <svg class="j-icon j-icon-sm"><use href="#logs"/></svg>
+            Pausar Monitoramento
+          </button>
+          <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="showView('central'); fecharDrawerAdaptativo();">
+            <svg class="j-icon j-icon-sm"><use href="#central-indicativos"/></svg>
+            Ver Indicativos
+          </button>
+        `;
+      }
+
+      $('drawerAdaptiveOverlay').classList.add('open');
+    }
+
+
+    function switchDrawerTab(tabId, btn) {
+      document.querySelectorAll('#drawerAdaptiveOverlay .drawer-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('#drawerAdaptiveOverlay .drawer-tab-content').forEach(c => c.classList.remove('active'));
+      $('dtab-' + tabId).classList.add('active');
+    }
+
+    function registrarFeedbackDrawerAtual(tipo) {
+      if (!activeFeedItemId) return;
+      const item = unifiedFeed.find(x => x.id === activeFeedItemId);
+      if (item) {
+        item.validacao = tipo;
+        showToast(`Indicativo marcado como ${tipo}`);
+        renderFeedConsolidado();
+        $('drawerStatusVal').textContent = tipo;
+      }
+    }
+
+    // ============================================================
+    // 2. RELATÓRIOS & EXPORTAÇÕES ASSÍNCRONAS
+    // ============================================================
+    function renderRelatorios() {
+      const tbody = $('tbodyRelatorios');
+      const tipo = $('filterTipoRel').value;
+      const status = $('filterStatusRel').value;
+
+      const filtered = relatorios.filter(r => {
+        if (tipo && !r.tipo.includes(tipo)) return false;
+        if (status && r.status !== status) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="empty-state">Nenhum relatório encontrado para o filtro selecionado.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(r => {
+        const isProc = r.status === 'Processando';
+        let statusHtml = '';
+        if (isProc) {
+          statusHtml = `
+            <div>
+              <span class="tag-quiet tag-processando">Processando (${r.progresso}%)</span>
+              <div class="async-progress-bar">
+                <div class="async-progress-fill" style="width: ${r.progresso}%;"></div>
+              </div>
+            </div>
+          `;
+        } else {
+          statusHtml = `<span class="tag-quiet tag-finalizado">Finalizado</span>`;
+        }
+
+        let actionHtml = '';
+        if (isProc) {
+          actionHtml = `<span style="font-size: 11px; color: var(--text-muted);">Aguardando...</span>`;
+        } else {
+          actionHtml = `
+            <button class="btn btn-secondary btn-sm" onclick="baixarRelatorioArquivo('${r.arquivo}', '${r.tipo}')" title="Baixar Arquivo">
+              <svg class="j-icon j-icon-sm" style="color: var(--brand-blue);"><use href="#exportar"/></svg>
+              Baixar
+            </button>
+          `;
+        }
+
+        return `
+          <tr>
+            <td class="col-rel-data font-mono">${r.data}</td>
+            <td class="col-rel-sol font-mono">${r.solicitante}</td>
+            <td class="col-rel-tipo" style="font-weight: 600;">${r.tipo}</td>
+            <td class="col-rel-stat">${statusHtml}</td>
+            <td class="col-rel-itens font-mono">${r.itens}</td>
+            <td class="col-rel-arq font-mono" title="${r.arquivo}" style="color: var(--text-secondary); font-size: 11.5px;">${r.arquivo}</td>
+            <td class="col-rel-act">${actionHtml}</td>
+          </tr>
+        `;
+      }).join('');
+
+      const procCount = relatorios.filter(r => r.status === 'Processando').length;
+      $('kpiRelProcessando').textContent = procCount;
+      $('badgeNavRel').textContent = procCount > 0 ? procCount : '0';
+    }
+
+    function abrirModalExportAssincrono() {
+      $('modalExportAssincrono').classList.add('open');
+    }
+
+    function fecharModalExportAssincrono(e) {
+      if (e && e.target !== $('modalExportAssincrono')) return;
+      $('modalExportAssincrono').classList.remove('open');
+    }
+
+    function confirmarSolicitacaoExportAssincrono() {
+      const escopo = document.querySelector('input[name="escopoExport"]:checked').value;
+      const formato = document.querySelector('input[name="formatoExport"]:checked').value;
+      fecharModalExportAssincrono();
+
+      const novoRel = {
+        id: 'REL-' + Date.now(),
+        data: 'Agora',
+        solicitante: 'Lucas Ferreira',
+        tipo: escopo,
+        status: 'Processando',
+        progresso: 18,
+        itens: escopo === 'Consolidado' ? '43' : (escopo === 'Citações' ? '32.171' : '3.513'),
+        arquivo: `${escopo.toLowerCase()}_${new Date().toISOString().slice(0,10)}_${Date.now().toString().slice(-4)}.${formato}`,
+        tamanho: 'Calculando...'
+      };
+
+      relatorios.unshift(novoRel);
+      showToast('Solicitação enviada para a fila assíncrona! Os robôs estão compilando os dados.');
+      showView('relatorios');
+
+      // Simulação suave de avanço de progresso em background
+      const interval = setInterval(() => {
+        if (novoRel.progresso < 90) {
+          novoRel.progresso += 28;
+          renderRelatorios();
+        } else {
+          clearInterval(interval);
+          novoRel.progresso = 100;
+          novoRel.status = 'Finalizado';
+          renderRelatorios();
+          showToast(`Relatório ${novoRel.arquivo} finalizado e pronto para download!`);
+        }
+      }, 1400);
+    }
+
+    function baixarRelatorioArquivo(nome, tipo) {
+      showToast(`Iniciando download de ${nome}...`);
+      // Gerar CSV ou Excel real
+      const headers = ['CNJ', 'Cliente', 'Tipo', 'Data', 'StatusValidacao'];
+      const rows = unifiedFeed.map(item => [item.cnj, `"${item.cliente}"`, item.tipoLabel, item.dataHora || item.dataAto, item.validacao]);
+      const csv = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const encoded = encodeURI(csv);
+      const link = document.createElement('a');
+      link.href = encoded;
+      link.download = nome;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    function atualizarFilaRelatorios() {
+      showToast('Fila de processamento sincronizada com o backend.');
+      renderRelatorios();
+    }
+
+    function limparFiltrosRelatorios() {
+      $('filterPeriodoRel').value = '';
+      $('filterTipoRel').value = '';
+      $('filterStatusRel').value = '';
+      renderRelatorios();
+    }
+
+    // ============================================================
+    // 3. CADASTROS DE PROCESSOS
+    // ============================================================
+    function renderCadastros() {
+      const tbody = $('tbodyCadastros');
+      const q = ($('searchCadastros').value || '').trim().toLowerCase();
+      const modo = $('filterModoCadastro').value;
+      const polo = $('filterPoloCadastro').value;
+
+      const filtered = cadastros.filter(c => {
+        if (modo && c.modo !== modo) return false;
+        if (polo && c.polo !== polo) return false;
+        if (q) {
+          const txt = (c.cnj + ' ' + c.cliente + ' ' + (c.controle || '')).toLowerCase();
+          if (!txt.includes(q)) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="empty-state">Nenhum processo cadastrado encontrado.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(c => {
+        // Destaque visual sutil e refinado do Modo
+        let modoBadge = '';
+        if (c.modo.includes('Mon') && c.modo.includes('Consulta')) {
+          modoBadge = `<span class="badge-modo modo-consulta-mon"><svg class="j-icon j-icon-xs"><use href="#monitoramento"/></svg> Consulta + Mon</span>`;
+        } else if (c.modo.includes('Só')) {
+          modoBadge = `<span class="badge-modo modo-so-mon"><svg class="j-icon j-icon-xs"><use href="#central-indicativos"/></svg> Só Monitorar</span>`;
+        } else {
+          modoBadge = `<span class="badge-modo modo-unica"><svg class="j-icon j-icon-xs"><use href="#buscar"/></svg> Consulta Única</span>`;
+        }
+
+        // Destaque visual sutil e refinado dos Indicativos (CAPA, CIT, AUD, HAB)
+        const allInds = ['CAPA', 'CIT', 'AUD', 'HAB'];
+        const indsHtml = `<div class="indicativos-group">` + allInds.map(ind => {
+          const has = (c.indicativos || []).includes(ind);
+          if (has) {
+            if (ind === 'CAPA') return `<span class="ind-pill ind-pill-capa" title="Dados de Capa: com dados">CAPA</span>`;
+            if (ind === 'CIT') return `<span class="ind-pill ind-pill-cit" title="Citação: monitorando">CIT</span>`;
+            if (ind === 'AUD') return `<span class="ind-pill ind-pill-aud" title="Audiência: monitorando">AUD</span>`;
+            if (ind === 'HAB') return `<span class="ind-pill ind-pill-hab" title="Habilitação: monitorando">HAB</span>`;
+          }
+          return `<span class="ind-pill ind-pill-off" title="${ind}: inativo">${ind}</span>`;
+        }).join('') + `</div>`;
+
+        return `
+          <tr class="${c.isNew ? 'row-new' : ''}">
+            <td class="col-cad-cnj">
+              <div class="cnj-cell">
+                <span class="font-mono">${c.cnj}</span>
+                <button class="copy-btn" onclick="copiarCnj('${c.cnj}')" title="Copiar CNJ">
+                  <svg class="j-icon j-icon-sm"><use href="#copiar-cnj"/></svg>
+                </button>
+              </div>
+            </td>
+            <td class="col-cad-cli font-semibold">${c.cliente}</td>
+            <td class="col-cad-polo">
+              <span class="tag-quiet" style="background: #f1f5f9; color: var(--text-secondary);">${c.polo}</span>
+            </td>
+            <td class="col-cad-ctrl font-mono" style="font-size: 11.5px;">${c.controle || '-'}</td>
+            <td class="col-cad-modo">${modoBadge}</td>
+            <td class="col-cad-escopo">${indsHtml}</td>
+            <td class="col-cad-data font-mono" style="font-size: 11px; color: var(--text-muted);">${c.dataInsercao.split(' ')[0]}</td>
+            <td class="col-cad-act">
+              <div style="display: inline-flex; align-items: center; justify-content: flex-end; gap: 4px; width: 100%;">
+                <button class="btn btn-secondary btn-sm" onclick="abrirDrawerCadastro('${c.id}')" title="Ver detalhes do processo cadastrado">
+                  <svg class="j-icon j-icon-sm"><use href="#ver-evidencia"/></svg>
+                  Ver
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function abrirModalRegistrar() {
+      $('regCnj').value = '';
+      $('regCliente').value = '';
+      $('regControle').value = '';
+      $('regPolo').value = 'Réu';
+      setModoOperacao('Consulta + Mon');
+      $('scopeCit').checked = true;
+      $('scopeAud').checked = true;
+      $('modalRegistrar').classList.add('open');
+      setTimeout(() => $('regCnj').focus(), 100);
+    }
+
+    function fecharModalRegistrar(e) {
+      if (e && e.target !== $('modalRegistrar')) return;
+      $('modalRegistrar').classList.remove('open');
+    }
+
+    function setModoOperacao(modo) {
+      selectedModo = modo;
+      $('modeCard-consulta-mon').classList.toggle('active', modo === 'Consulta + Mon');
+      $('modeCard-so-mon').classList.toggle('active', modo === 'Só Monitorar');
+      $('modeCard-consulta-unica').classList.toggle('active', modo === 'Consulta Única');
+    }
+
+    function aplicarMascaraCnj(input) {
+      let v = input.value.replace(/\D/g, '');
+      if (v.length > 20) v = v.substring(0, 20);
+      let res = '';
+      if (v.length > 0) res = v.substring(0, 7);
+      if (v.length > 7) res += '-' + v.substring(7, 9);
+      if (v.length > 9) res += '.' + v.substring(9, 13);
+      if (v.length > 13) res += '.' + v.substring(13, 14);
+      if (v.length > 14) res += '.' + v.substring(14, 16);
+      if (v.length > 16) res += '.' + v.substring(16, 20);
+      input.value = res;
+    }
+
+    function detectarTribunal(cnj) {
+      if (cnj.includes('.8.26.')) return 'TJSP (1ª Instância)';
+      if (cnj.includes('.8.19.')) return 'TJRJ (Comarcas)';
+      if (cnj.includes('.8.02.')) return 'TJAL (Maceió)';
+      if (cnj.includes('.8.05.')) return 'TJBA (Salvador)';
+      if (cnj.includes('.8.06.')) return 'TJCE (Fortaleza)';
+      if (cnj.includes('.8.21.')) return 'TJRS (Porto Alegre)';
+      if (cnj.includes('.8.22.')) return 'TJRO (Porto Velho)';
+      return 'Tribunal de Origem';
+    }
+
+    function salvarNovoProcesso() {
+      const cnj = $('regCnj').value.trim();
+      if (!cnj || cnj.length < 15) {
+        alert('Por favor, informe um número de processo CNJ válido.');
+        return;
+      }
+      const cli = $('regCliente').value.trim() || 'ENTER VOLKSWAGEN';
+      const polo = $('regPolo').value;
+      const ctrl = $('regControle').value.trim() || 'MANUAL-' + Math.floor(Math.random() * 8999 + 1000);
+      const indicativos = [];
+      if ($('scopeCit').checked) indicativos.push('CIT');
+      if ($('scopeAud').checked) indicativos.push('AUD');
+
+      const novoCad = {
+        id: 'CAD-' + Date.now(),
+        cnj: cnj,
+        cliente: cli,
+        polo: polo,
+        controle: ctrl,
+        modo: selectedModo,
+        indicativos: indicativos,
+        status: 'Concluído',
+        dataInsercao: 'Agora',
+        solicitante: 'Lucas Ferreira',
+        isNew: true
+      };
+      cadastros.unshift(novoCad);
+
+      const trib = detectarTribunal(cnj);
+      const novoMon = {
+        id: 'MON-' + Date.now(),
+        cnj: cnj,
+        cliente: cli,
+        tribunal: trib,
+        modo: selectedModo,
+        indCit: $('scopeCit').checked,
+        indAud: $('scopeAud').checked,
+        citValidada: 'Pendente',
+        audValidada: 'Pendente',
+        dataAtivacao: 'Hoje, agora',
+        status: 'Ativo',
+        ultimaVarredura: 'Iniciando varredura...',
+        isNew: true
+      };
+      monitoramento.unshift(novoMon);
+
+      const totalMon = 19355 + monitoramento.filter(m => m.isNew).length;
+      $('badgeNavMon').textContent = totalMon.toLocaleString('pt-BR');
+      $('kpiMonAtivos').textContent = totalMon.toLocaleString('pt-BR');
+      $('kpiCadMonAtivo').textContent = totalMon.toLocaleString('pt-BR');
+
+      renderCadastros();
+      renderMonitoramento();
+      $('modalRegistrar').classList.remove('open');
+      
+      showToast(`Processo ${cnj} cadastrado e ATIVADO na esteira de monitoramento contínuo!`);
+    }
+
+    // ============================================================
+    // 4. PROCESSOS EM MONITORAMENTO
+    // ============================================================
+    function renderMonitoramento() {
+      const tbody = $('tbodyMonitoramento');
+      const q = ($('searchMon').value || '').trim().toLowerCase();
+      const trib = $('filterTribunalMon').value;
+
+      const filtered = monitoramento.filter(m => {
+        if (trib && !m.tribunal.includes(trib)) return false;
+        if (q) {
+          const txt = (m.cnj + ' ' + m.cliente + ' ' + m.tribunal).toLowerCase();
+          if (!txt.includes(q)) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" class="empty-state">Nenhum processo em monitoramento encontrado.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(m => {
+        let modoBadge = '';
+        if (m.modo.includes('Mon') && m.modo.includes('Consulta')) {
+          modoBadge = `<span class="badge-modo modo-consulta-mon"><svg class="j-icon j-icon-xs"><use href="#monitoramento"/></svg> Consulta + Mon</span>`;
+        } else if (m.modo.includes('Só')) {
+          modoBadge = `<span class="badge-modo modo-so-mon"><svg class="j-icon j-icon-xs"><use href="#central-indicativos"/></svg> Só Monitorar</span>`;
+        } else {
+          modoBadge = `<span class="badge-modo modo-unica"><svg class="j-icon j-icon-xs"><use href="#buscar"/></svg> Consulta Única</span>`;
+        }
+
+        const citBadge = m.indCit 
+          ? `<span class="ind-pill ind-pill-cit" style="cursor: pointer;" onclick="showView('central'); switchStreamTab('CITACAO');" title="Indicativo de Citação detectado! Clique para ver na Central">CIT</span>` 
+          : `<span class="ind-pill ind-pill-off" title="Sem citação">-</span>`;
+
+        const audBadge = m.indAud 
+          ? `<span class="ind-pill ind-pill-aud" style="cursor: pointer;" onclick="showView('central'); switchStreamTab('AUDIENCIA');" title="Audiência detectada! Clique para ver na Central">AUD</span>` 
+          : `<span class="ind-pill ind-pill-off" title="Sem audiência">-</span>`;
+
+        return `
+          <tr class="${m.isNew ? 'row-new' : ''}">
+            <td class="col-mon-cnj">
+              <div class="cnj-cell">
+                <span class="font-mono">${m.cnj}</span>
+                <button class="copy-btn" onclick="copiarCnj('${m.cnj}')" title="Copiar CNJ">
+                  <svg class="j-icon j-icon-sm"><use href="#copiar-cnj"/></svg>
+                </button>
+              </div>
+            </td>
+            <td class="col-mon-cli font-semibold">${m.cliente}</td>
+            <td class="col-mon-trib font-mono" style="font-size: 11.5px;">${m.tribunal}</td>
+            <td class="col-mon-modo">${modoBadge}</td>
+            <td class="col-mon-cit">${citBadge}</td>
+            <td class="col-mon-aud">${audBadge}</td>
+            <td class="col-mon-stat">
+              <span class="tag-quiet tag-aprovada" style="gap: 4px;"><span class="micro-dot dot-citacao" style="margin:0;"></span> Ativo</span>
+            </td>
+            <td class="col-mon-varredura font-mono" style="font-size: 11px; color: var(--text-muted);">${m.ultimaVarredura}</td>
+            <td class="col-mon-act">
+              <div style="display: inline-flex; align-items: center; justify-content: flex-end; gap: 4px; width: 100%;">
+                <button class="btn btn-secondary btn-sm" onclick="abrirDrawerMonitoramento('${m.id}')" title="Ver detalhes do monitoramento deste processo">
+                  <svg class="j-icon j-icon-sm"><use href="#ver-evidencia"/></svg>
+                  Ver
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // ============================================================
+    // 5. WIZARD DE IMPORTAÇÃO
+    // ============================================================
+    function abrirModalImportar() {
+      currentStepImport = 1;
+      atualizarViewWizard();
+      $('modalImportar').classList.add('open');
+    }
+
+    function fecharModalImportar(e) {
+      if (e && e.target !== $('modalImportar')) return;
+      $('modalImportar').classList.remove('open');
+    }
+
+    function atualizarViewWizard() {
+      for (let i = 1; i <= 3; i++) {
+        const el = $('step-content-' + i);
+        if (el) el.style.display = i === currentStepImport ? 'block' : 'none';
+        const stepHeader = $('wstep-' + i);
+        if (stepHeader) {
+          stepHeader.classList.toggle('active', i === currentStepImport);
+          stepHeader.classList.toggle('done', i < currentStepImport);
+        }
+      }
+      $('btnImportVoltar').style.display = currentStepImport > 1 ? 'inline-flex' : 'none';
+      if (currentStepImport === 3) {
+        $('btnImportAvancar').textContent = 'Confirmar & Iniciar Monitoramento';
+      } else {
+        $('btnImportAvancar').textContent = 'Avançar';
+      }
+    }
+
+    function avancarStepImportar(target) {
+      if (target) {
+        currentStepImport = target;
+      } else if (currentStepImport < 3) {
+        currentStepImport++;
+      } else {
+        $('modalImportar').classList.remove('open');
+        showToast('1.450 processos importados e inseridos na esteira de monitoramento contínuo!');
+        showView('monitoramento');
+        return;
+      }
+      atualizarViewWizard();
+    }
+
+    function voltarStepImportar() {
+      if (currentStepImport > 1) {
+        currentStepImport--;
+        atualizarViewWizard();
+      }
+    }
+
+    function setImportModo(card, modo) {
+      document.querySelectorAll('#step-content-1 .mode-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+    }
+
+    // Utilitários
+    function formatarDataBr(isoStr) {
+      if (!isoStr) return '-';
+      const parts = isoStr.split('-');
+      if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+      return isoStr;
+    }
+
+    function copiarCnj(cnj) {
+      navigator.clipboard.writeText(cnj).then(() => {
+        showToast(`CNJ ${cnj} copiado com sucesso!`);
+      }).catch(() => {
+        showToast(`CNJ copiado: ${cnj}`);
+      });
+    }
+
+    // Inicialização
+    atualizarKpisPorAba('TODOS');
+    renderFeedConsolidado();
+    renderRelatorios();
+    renderCadastros();
+    renderMonitoramento();
+  </script>
+</body>
+</html>
