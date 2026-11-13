@@ -1023,6 +1023,74 @@ th{border-bottom-color:var(--line-2)}
 .regcta.over{border-color:var(--brand);background:var(--brand-soft)}
 @media (max-width:640px){.modes,.opts{grid-template-columns:1fr}.md{border-left:0;border-top:1px solid var(--line-2)}.md:first-child{border-top:0}.md p{min-height:0}.op{border-left:0!important;border-top:1px solid var(--line)!important}.op:first-child{border-top:0!important}.shf{flex-direction:column;align-items:stretch}}
 
+/* ===== v10 · tema escuro azul-petróleo (só quando escolhido) ===== */
+:root[data-theme="dark"]{
+  --bg:#0F2A36; --surface:#153644; --surface-2:#1B4151; --surface-3:#234D5F; --line:#21485A; --line-2:#2D5A6E;
+  --fg:#E6F0F3; --fg-2:#A9C2CB; --fg-3:#7B98A3;
+  --brand:#7CC4E4; --brand-soft:#1D4A5D; --brand-ink:#A6D9EF;
+  --cta:#3FC48D; --cta-ink:#5AD3A0; --cta-fg:#0A231A;
+  --brass:#7CC4E4; --brass-soft:#1D4A5D;
+  --ok:#5CCB9B; --ok-soft:#1A3F3A; --warn:#E5B865; --warn-soft:#3A3A2A; --bad:#F0998F; --bad-soft:#40333A;
+  --forte:#7CC4E4; --medio:#4C8FAA; --fraco:#2C5B6E; --aud:#7FD6C8; --aud-soft:#1B4645; --slate:#CFE0E6;
+  --sv-all:#2B5466; --sv-cit:#1E6A8C; --sv-aud:#1E7470;
+  --side-bg:#0A212B; --side-fg:#E6F0F3; --side-fg-2:#8FB0BC; --side-line:#173846; --side-on:#153644;
+  --shadow-2:none; --shadow-3:0 24px 60px -28px rgba(0,0,0,.6),0 0 0 1px var(--line-2);
+  --glass:#0F2A36; --scrim:rgba(6,20,26,.6); color-scheme:dark}
+
+/* painel lateral: conteúdo não encolhe */
+.shb>*{flex-shrink:0}
+.shb{min-height:0}
+
+/* marca */
+.seal{width:32px;height:32px;border-radius:3px;background:var(--side-fg);color:var(--side-bg);display:grid;place-items:center;flex:none}
+.seal svg{width:20px;height:20px}
+
+/* menu recolhível */
+.app{transition:grid-template-columns .5s var(--ease)}
+.side .brand{position:relative}
+.colb{margin-left:auto;width:28px;height:28px;display:grid;place-items:center;color:var(--side-fg-2);border-radius:2px;transition:background .25s,color .25s,transform .5s var(--ease);flex:none}
+.colb:hover{background:var(--side-on);color:var(--side-fg)}
+.colb svg{width:16px;height:16px}
+.nv .tx{min-width:0;line-height:1.25}
+.app.mini{grid-template-columns:68px minmax(0,1fr)!important}
+.app.mini .side{padding:20px 10px;overflow:hidden}
+.app.mini .brand{flex-direction:column;gap:10px;padding:0}
+.app.mini .brand>div:nth-child(2),.app.mini .side .eyebrow,.app.mini .nv .tx,.app.mini .nv .ct,.app.mini .user>div:last-child{display:none}
+.app.mini .colb{margin:0;transform:rotate(180deg)}
+.app.mini .nv{justify-content:center;padding:9px 0}
+.app.mini .nv.on::before{left:-10px}
+.app.mini .user{justify-content:center;padding:8px 0}
+.app.mini .ng{gap:4px}
+.app.mini .nv .dotc{display:block}
+.nv .dotc{display:none;position:absolute;top:6px;right:10px;width:7px;height:7px;border-radius:50%;background:var(--cta)}
+
+/* filtros */
+.fsel{height:32px;font-size:12.5px}
+.fsep{width:1px;height:22px;background:var(--line-2)}
+.jtb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px;border:1px solid var(--line-2);border-bottom:0;background:var(--surface)}
+.jobs{gap:0}
+.job{border-radius:0;border-top:0!important}
+.jobs .job:first-child{border-top:1px solid var(--line-2)!important}
+.clr{color:var(--brand);font-size:12.5px;font-weight:500;padding:4px 6px}
+
+/* ===== v11 · escuro azul-marinho + menu ===== */
+:root[data-theme="dark"]{
+  --bg:#0D1626; --surface:#132036; --surface-2:#192942; --surface-3:#21334F; --line:#1F304A; --line-2:#2A3E5C;
+  --fg:#E8EDF5; --fg-2:#AAB6C9; --fg-3:#7C8AA1;
+  --brand:#8FB2EE; --brand-soft:#1C2E4C; --brand-ink:#B5CCF5;
+  --cta:#3FBF89; --cta-ink:#57CE9C; --cta-fg:#0A2219;
+  --brass:#C9A96A; --brass-soft:#2A2A2A;
+  --ok:#5CC798; --ok-soft:#16302E; --warn:#E2B566; --warn-soft:#2E2C26; --bad:#EF978D; --bad-soft:#33242C;
+  --forte:#8FB2EE; --medio:#5373A8; --fraco:#2C4166; --aud:#7FCFC4; --aud-soft:#173338; --slate:#CBD4E2;
+  --sv-all:#2A3A55; --sv-cit:#24497F; --sv-aud:#1D5F63;
+  --side-bg:#0A1220; --side-fg:#E8EDF5; --side-fg-2:#8E9CB3; --side-line:#18253B; --side-on:#132036;
+  --shadow-2:none; --shadow-3:0 24px 60px -28px rgba(0,0,0,.65),0 0 0 1px var(--line-2);
+  --glass:#0D1626; --scrim:rgba(5,10,20,.62); color-scheme:dark}
+.app{grid-template-columns:264px minmax(0,1fr)}
+.side .nv{gap:10px;white-space:normal}
+.nv .tx{flex:1 1 auto;min-width:0;line-height:1.25}
+.nv .ct{flex:none;margin-left:6px}
+
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.12s!important}}
 </style>
 
@@ -1043,25 +1111,27 @@ th{border-bottom-color:var(--line-2)}
  <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/></symbol>
  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></symbol>
  <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+ <symbol id="i-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"><path d="M5 2.8h9.5L19 7.3v13.9H5z"/><path d="M14.5 2.8v4.5H19"/><path d="M7.5 15h2.2l1.4-3.4 2.1 6 1.5-2.6h1.8"/><path d="M8 8.5h4" opacity=".55"/></symbol>
+ <symbol id="i-side" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M9 4.5v15M15 10l-2 2 2 2"/></symbol>
  <symbol id="i-gavel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m14 4 6 6M11 7l6 6M12.5 5.5l-4 4 6 6 4-4zM9.5 12.5 3 19l2 2 6.5-6.5M4 21h9"/></symbol>
  <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></symbol>
 </svg>
 
 <div class="app">
   <aside class="side" id="side">
-    <div class="brand"><div class="seal"><svg width="16" height="16"><use href="#i-gavel"/></svg></div><div><b>Jurify Monitor</b><span>Indicativos processuais</span></div></div>
+    <div class="brand"><div class="seal" title="Jurify Monitor"><svg><use href="#i-mark"/></svg></div><div><b>Jurify Monitor</b><span>Indicativos processuais</span></div><button class="colb" id="colB" aria-label="Recolher menu" title="Recolher menu"><svg><use href="#i-side"/></svg></button></div>
     <nav class="ng" aria-label="Operação"><small class="eyebrow">Operação</small>
-      <a class="nv" href="#central" data-r="central"><svg><use href="#i-central"/></svg>Central de Indicativos<span class="ct hot num" id="ctPend">0</span></a>
+      <a class="nv" href="#central" data-r="central" title="Central de Indicativos"><svg><use href="#i-central"/></svg><span class="tx">Central de Indicativos</span><span class="ct hot num" id="ctPend">0</span><i class="dotc"></i></a>
     </nav>
     <nav class="ng" aria-label="Gestão de processos"><small class="eyebrow">Gestão de processos</small>
-      <a class="nv" href="#cadastro" data-r="cadastro"><svg><use href="#i-cad"/></svg>Cadastro automatizado<span class="ct num">99 mil</span></a>
-      <a class="nv" href="#monitoramento" data-r="monitoramento"><svg><use href="#i-mon"/></svg>Monitoramento<span class="ct num">19.355</span></a>
+      <a class="nv" href="#cadastro" data-r="cadastro" title="Cadastro automatizado"><svg><use href="#i-cad"/></svg><span class="tx">Cadastro automatizado</span><span class="ct num">99 mil</span></a>
+      <a class="nv" href="#monitoramento" data-r="monitoramento" title="Monitoramento"><svg><use href="#i-mon"/></svg><span class="tx">Monitoramento</span><span class="ct num">19.355</span></a>
     </nav>
     <nav class="ng" aria-label="Exportações"><small class="eyebrow">Exportações</small>
-      <a class="nv" href="#relatorios" data-r="relatorios"><svg><use href="#i-rel"/></svg>Relatórios<span class="ct num" id="ctJobs">3</span></a>
+      <a class="nv" href="#relatorios" data-r="relatorios" title="Relatórios"><svg><use href="#i-rel"/></svg><span class="tx">Relatórios</span><span class="ct num" id="ctJobs">3</span></a>
     </nav>
     <nav class="ng" aria-label="Sistema"><small class="eyebrow">Sistema</small>
-      <a class="nv" href="#design" data-r="design"><svg><use href="#i-ds"/></svg>Design System</a>
+      <a class="nv" href="#design" data-r="design" title="Design System"><svg><use href="#i-ds"/></svg><span class="tx">Design System</span></a>
     </nav>
     <div class="user"><div class="av">LF</div><div style="min-width:0"><div style="font-weight:500;font-size:13px">Lucas Ferreira</div><div class="faint" style="font-size:11.5px">Gestor · Equipe de citação</div></div></div>
   </aside>
@@ -1188,7 +1258,7 @@ function openFocus(){FQ.q=IND.filter(x=>(S.tab==='all'||x.tipo===S.tab)&&x.statu
 function closeFocus(){if(!$('#focus').classList.contains('on'))return;$('#focus').classList.remove('on');if($('#tb'))drawCentral(true);updCounts()}
 function focusDraw(){const x=FQ.q[FQ.i],F=$('#focus');const done=!x;
   const head=`<div class="fh"><button class="btn g sm" id="fX">${ic('x')}Sair da triagem</button><div class="fp"><i style="transform:scaleX(${FQ.i/FQ.n})"></i></div><span class="num muted" style="font-size:13px">${Math.min(FQ.i+1,FQ.n)} de ${FQ.n}</span></div>`;
-  if(done){F.innerHTML=head+`<div class="fstage"><div class="fdone"><div class="pring" style="width:120px;height:120px"><div class="stamp"><span>Triado</span><small>${FQ.n} indicativos</small></div></div><div style="font-size:28px;font-weight:700;letter-spacing:-.02em">Triagem concluída</div><div class="muted">Todas as decisões foram registradas. Exporte o lote para o batimento no Max.</div><div style="display:flex;gap:8px"><button class="btn s" id="fBack">Voltar à Central</button><button class="btn p" id="fExp">${ic('dl')}Exportar lote</button></div></div></div>`;
+  if(done){F.innerHTML=head+`<div class="fstage"><div class="fdone"><div class="pring" style="width:120px;height:120px"><div class="stamp"><span>Triado</span><small>${FQ.n} indicativos</small></div></div><div style="font-size:28px;font-weight:700;letter-spacing:-.02em">Triagem concluída</div><div class="muted">Todas as decisões foram registradas. Exporte o lote para o batimento no Max.</div><div style="display:flex;gap:8px"><button class="btn s" id="fBack">Voltar à Central</button><button class="btn p" id="fExp">${ic('dl')}Exportar</button></div></div></div>`;
     $('#fBack').onclick=closeFocus;$('#fExp').onclick=()=>{closeFocus();$('#expNow')&&$('#expNow').click()};$('#fX').onclick=closeFocus;return}
   const au=IND.find(y=>y.tipo==='aud'&&y.cnj===x.cnj&&y!==x);
   F.innerHTML=head+`<div class="fstage"><article class="fcardx" id="fCard"><div class="fct"><small>${x.tipo==='cit'?'Indicativo de citação':'Indicativo de audiência'} · ${x.tr} · ${x.cl}</small><span class="mono">${x.cnj}</span></div>
@@ -1224,7 +1294,7 @@ function vCentral(){
    </div></section>`;
   $$('#tabs .sv').forEach(b=>b.onclick=()=>setTab(b.dataset.k));
   $('#q').oninput=e=>{S.q=e.target.value;drawCentral()};$('#clf').onchange=e=>{S.cl=e.target.value;drawCentral()};
-  $('#expNow').onclick=()=>openExport({tipo:S.tab==='aud'?'Audiências':S.tab==='cit'?'Citações':'Consolidado',per:'hoje'});
+  $('#expNow').onclick=()=>openExport({src:'Central'});
   drawCentral(true)}
 function rows(){const q=S.q.toLowerCase().replace(/[.\-]/g,'');return IND.filter(x=>(S.tab==='all'||x.tipo===S.tab)&&(S.cl===''||x.cl===S.cl)&&(!q||(x.cnj.replace(/[.\-]/g,'')+x.cl+x.t).toLowerCase().includes(q)))}
 function drawCentral(anim){
@@ -1239,8 +1309,8 @@ function drawCentral(anim){
     m=metric('Indicativos no lote',B.length,`${c} citações · ${B.length-c} audiências`,null)+metric('Pendentes de triagem',B.filter(x=>x.status==='pend').length,'precisam de decisão hoje',null,'var(--brand)')+metric('Validados',B.filter(x=>x.status==='val').length,'confirmados pela equipe',null,'var(--ok)')+metric('Triados',tri,`${Math.round(tri/B.length*100)}% do lote`,tri/B.length)}
   syncMetrics(m,anim);svcUpdate();$('#hereN').textContent=SVC[S.tab][1];$('#hereD').textContent=S.tab==='all'?'· métricas e colunas gerais':S.tab==='cit'?'· métricas e colunas de citação':'· métricas e colunas de audiência';$('#tbTitle').textContent=S.tab==='all'?'Todos os indicativos do lote':S.tab==='cit'?'Citações do lote':'Audiências do lote';
   const pend=B.filter(x=>x.status==='pend'),lateP=pend.filter(x=>x.late).length;
-  $('#guide').innerHTML=pend.length?`<span class="gs"><strong>Próximo passo:</strong> ${pend.length} indicativo${pend.length>1?'s':''} aguardando decisão${lateP?`, ${lateP} chegaram tarde e merecem atenção primeiro`:''}. Abra com <kbd>Ver</kbd> para ler a evidência, depois valide ou descarte.</span><button class="btn s sm" id="gFocus">Iniciar triagem guiada</button><button class="btn g sm" id="gLeg">Como ler esta tela</button><button class="btn g sm" id="gKey">Atalhos <kbd>?</kbd></button>`:`<span class="gs"><strong>Lote concluído.</strong> Todos os indicativos desta aba têm decisão. Exporte o lote para o batimento no Max.</span><button class="btn p sm" onclick="$('#expNow').click()">Exportar lote</button>`;
-  $('#gFocus')&&($('#gFocus').onclick=openFocus);$('#gLeg')&&($('#gLeg').onclick=openLegend);$('#gKey')&&($('#gKey').onclick=openKeys);
+  $('#guide').innerHTML=pend.length?`<span class="gs"><strong>Próximo passo:</strong> ${pend.length} indicativo${pend.length>1?'s':''} aguardando decisão${lateP?`, ${lateP} chegaram tarde e merecem atenção primeiro`:''}. Abra com <kbd>Ver</kbd> para ler a evidência, depois valide ou descarte.</span><button class="btn s sm" id="gFocus">Iniciar triagem guiada</button><button class="btn g sm" id="gLeg">Como ler esta tela</button><button class="btn g sm" id="gKey">Atalhos <kbd>?</kbd></button>`:`<span class="gs"><strong>Lote concluído.</strong> Todos os indicativos desta aba têm decisão. Exporte o lote para o batimento no Max.</span><button class="btn p sm" id="gExp">Exportar lote</button>`;
+  $('#gExp')&&($('#gExp').onclick=()=>openExport({src:'Central'}));$('#gFocus')&&($('#gFocus').onclick=openFocus);$('#gLeg')&&($('#gLeg').onclick=openLegend);$('#gKey')&&($('#gKey').onclick=openKeys);
   S.pc=S.pc||{};$('#stf').innerHTML=[['pend','Pendentes',cnt('pend')],['val','Validados',cnt('val')],['desc','Descartados',cnt('desc')],['all','Todos',base.length]].map(([k,l,n])=>{const ch=!anim&&S.pc[k]!=null&&S.pc[k]!==n;S.pc[k]=n;return `<button class="pf ${S.st===k?'on':''}" data-k="${k}">${l}<span class="n ${ch?'tick':''}">${n}</span></button>`}).join('');
   $$('#stf .pf').forEach(b=>b.onclick=()=>{S.st=b.dataset.k;S.sel.clear();bulk();drawCentral()});
   const T=S.tab;
@@ -1394,12 +1464,16 @@ function vCadastro(){
   <div class="sec2"><div class="sh2"><h2 class="serif">Lotes de cadastro</h2><span class="faint" style="font-size:12.5px">Nada vai para o CRM sem a sua aprovação</span></div>
    <div class="card"><div class="tw"><table><thead><tr><th>Lote</th><th>Arquivo</th><th style="text-align:right">Processos</th><th>Resultado da busca</th><th>Situação</th><th>Enviado por</th><th style="text-align:right">Ações</th></tr></thead><tbody id="impT"></tbody></table></div></div></div>
   <div class="sec2"><div class="sh2"><h2 class="serif">Processos cadastrados</h2><div class="totals"><div><b class="num" id="cpTot"></b>no total</div><div><b class="num" id="cpMon"></b>monitorando</div></div></div>
-   <div class="card"><div class="tb"><label class="search">${ic('search').replace('<svg','<svg width="14" height="14"')}<input id="cpQ" placeholder="Buscar CNJ, cliente, solicitante ou ID"></label><span class="muted" id="cpN" style="font-size:12.5px"></span><span style="flex:1"></span><button class="btn s sm" id="cpRm" disabled>Remover monitoramento</button><button class="btn s sm" id="cpImp" disabled>Marcar como importado</button><button class="btn g sm" id="cpEx">${ic('dl')}Exportar</button></div>
+   <div class="card"><div class="tb"><label class="search">${ic('search').replace('<svg','<svg width="14" height="14"')}<input id="cpQ" placeholder="Buscar CNJ, cliente, solicitante ou ID"></label>
+    <select class="sel fsel" id="cfM" aria-label="Modo"><option value="">Todos os modos</option><option>Consulta única</option><option>Consulta + Mon</option></select>
+    <select class="sel fsel" id="cfA" aria-label="Encontrado"><option value="">Qualquer resultado</option><option value="capa">Capa encontrada</option><option value="cit">Citação encontrada</option><option value="aud">Audiência encontrada</option><option value="hab">Habilitação encontrada</option><option value="mon">Monitorando</option></select>
+    <select class="sel fsel" id="cfS" aria-label="Situação"><option value="">Todas as situações</option><option value="ok">Concluído</option><option value="upd">Atualizando informações</option><option value="crm">Importado no CRM</option></select>
+    <select class="sel fsel" id="cfC" aria-label="Cliente"><option value="">Todos os clientes</option>${CL.map(c=>`<option>${c}</option>`).join('')}</select><button class="clr" id="cfX" hidden>Limpar filtros</button><span class="muted" id="cpN" style="font-size:12.5px"></span><span style="flex:1"></span><button class="btn s sm" id="cpRm" disabled>Remover monitoramento</button><button class="btn s sm" id="cpImp" disabled>Marcar como importado</button><button class="btn s sm" id="cpEx">${ic('dl')}Exportar</button></div>
    <div class="lgd"><span>${fb('cit','on')} encontrado no tribunal</span><span>${fb('cit','off')} buscado, nada encontrado</span><span>${fb('cit','na')} não solicitado</span></div>
    <div class="tw"><table><thead id="cadH"></thead><tbody id="cadP"></tbody></table></div></div></div>
   </section>`;
   drawImp();drawImpT(true);drawCadP(true);$('#regTop').onclick=()=>openReg('cu','');
-  $('#cpQ').oninput=e=>{CS.q=e.target.value;drawCadP()};$('#cpEx').onclick=()=>openExport({tipo:'Monitoramento'});
+  $('#cpQ').oninput=e=>{CS.q=e.target.value;drawCadP()};[['#cfM','modo'],['#cfA','ach'],['#cfS','sit'],['#cfC','cl']].forEach(([i,k])=>{$(i).value=CS[k];$(i).onchange=e=>{CS[k]=e.target.value;drawCadP(true)}});$('#cfX').onclick=()=>{Object.assign(CS,{modo:'',ach:'',sit:'',cl:'',q:''});$('#cpQ').value='';['#cfM','#cfA','#cfS','#cfC'].forEach(i=>$(i).value='');drawCadP(true)};$('#cpEx').onclick=()=>openExport({src:'Cadastro'});
   $('#cpRm').onclick=()=>{const ps=CADP.filter(p=>CS.sel.has(p.id)),prev=ps.map(p=>p.mon);ps.forEach(p=>p.mon=false);CS.sel.clear();drawCadP();toast(`Monitoramento removido de ${ps.length} processo${ps.length>1?'s':''}`,()=>{ps.forEach((p,i)=>p.mon=prev[i]);drawCadP()})};
   $('#cpImp').onclick=()=>{const ps=CADP.filter(p=>CS.sel.has(p.id)),prev=ps.map(p=>p.crm);ps.forEach(p=>p.crm=true);CS.sel.clear();drawCadP();toast(`${ps.length} processo${ps.length>1?'s':''} marcado${ps.length>1?'s':''} como importado no CRM`,()=>{ps.forEach((p,i)=>p.crm=prev[i]);drawCadP()})};
   $('#dlModel').onclick=()=>toast('Modelo com CNJ, Cliente, Código, Polo, Núcleo e Líder. No protótipo o download fica simulado.')}
@@ -1467,8 +1541,8 @@ const CADP=[];
 function mkCad(cnj,cl,modo,sol,lot){const mon=modo!=='Consulta única',f=k=>rnd()<k?'on':'off',cit=f(.3),aud=mon?f(.2):'na',hab=mon?f(.25):'na';
   return{id:'P'+(9000+CADP.length),cnj,cl,sol:sol||'Larissa Silva',idSol:lot||('01M77WH'+String(1000+CADP.length)),modo,mon,found:{capa:rnd()<.92?'on':'off',cit,aud,hab},citado:cit==='on',audF:aud==='on',lim:rnd()<.08,habil:hab==='on',st:rnd()<.85?'ok':'upd',crm:rnd()<.5,at:'12/11/2026 09:'+String(40+CADP.length%19).padStart(2,'0')}}
 for(let i=0;i<14;i++){const [a,j,tr]=pick(trList);CADP.push(mkCad(mkCNJ(a,j,tr),pick(CL),i%5===4?'Consulta única':'Consulta + Mon'))}
-const CS={sel:new Set(),q:''};
-function drawCadP(anim){const el=$('#cadP');if(!el)return;const q=CS.q.toLowerCase().replace(/[.\-]/g,'');const L=CADP.filter(p=>!q||(p.cnj.replace(/[.\-]/g,'')+p.cl+p.sol+p.idSol).toLowerCase().includes(q));
+const CS={sel:new Set(),q:'',modo:'',sit:'',cl:'',ach:''};
+function drawCadP(anim){const el=$('#cadP');if(!el)return;const q=CS.q.toLowerCase().replace(/[.\-]/g,'');const sitOf=p=>p.st==='upd'?'upd':p.crm?'crm':'ok';const L=CADP.filter(p=>(!q||(p.cnj.replace(/[.\-]/g,'')+p.cl+p.sol+p.idSol).toLowerCase().includes(q))&&(!CS.modo||p.modo===CS.modo)&&(!CS.sit||sitOf(p)===CS.sit)&&(!CS.cl||p.cl===CS.cl)&&(!CS.ach||(CS.ach==='mon'?p.mon:p.found[CS.ach]==='on')));
   const all=L.length&&L.every(p=>CS.sel.has(p.id));
   $('#cadH').innerHTML=`<tr><th style="width:36px"><button class="cb ${all?'on':''}" id="cpAll" aria-label="Selecionar todos"></button></th><th>Processo</th><th>Solicitante</th><th>Cliente</th><th title="Como o processo foi pedido">Modo</th><th title="Preenchido: encontrado. Tracejado: buscado, nada encontrado.">Buscado no tribunal</th><th>Citado</th><th>Audiência futura</th><th>Liminar</th><th>Habilitado</th><th>Monitorando</th><th>Situação</th><th>Inserido em</th><th style="text-align:right">Ações</th></tr>`;
   el.innerHTML=L.map((p,i)=>`<tr class="${anim||p.fresh?'enter':''} ${p.fresh?'flash':''} ${CS.sel.has(p.id)?'sel-row':''}" style="animation-delay:${Math.min(i,14)*22}ms"><td><button class="cb ${CS.sel.has(p.id)?'on':''}" data-cp="${p.id}" aria-label="Selecionar"></button></td>
@@ -1476,7 +1550,7 @@ function drawCadP(anim){const el=$('#cadP');if(!el)return;const q=CS.q.toLowerCa
    <td><div class="fbs">${['capa','cit','aud','hab'].map(k=>fb(k,p.found[k])).join('')}</div></td><td>${yn(p.citado)}</td><td>${yn(p.audF)}</td><td>${yn(p.lim)}</td><td>${yn(p.habil)}</td><td>${yn(p.mon)}</td>
    <td>${p.st==='upd'?'<span class="chip br">Atualizando informações</span>':p.crm?'<span class="chip ok">Importado no CRM</span>':'<span class="chip ok">Concluído</span>'}</td><td class="num muted" style="white-space:nowrap">${p.at}</td>
    <td><div class="ra"><button class="btn s sm" data-pv="${p.id}">${ic('eye')}Ver</button></div></td></tr>`).join('')||'<tr><td colspan="14"><div class="empty"><b>Nenhum processo encontrado</b>Ajuste a busca.</div></td></tr>';
-  CADP.forEach(p=>p.fresh=false);const n=CS.sel.size;$('#cpRm').disabled=!n;$('#cpImp').disabled=!n;$('#cpN').textContent=n?`${n} selecionado${n>1?'s':''}`:`${L.length} exibidos`;
+  CADP.forEach(p=>p.fresh=false);$('#cfX')&&($('#cfX').hidden=!(CS.modo||CS.ach||CS.sit||CS.cl||CS.q));const n=CS.sel.size;$('#cpRm').disabled=!n;$('#cpImp').disabled=!n;$('#cpN').textContent=n?`${n} selecionado${n>1?'s':''}`:`${L.length} exibidos`;
   $('#cpTot').textContent=fmt(99375+CADP.length);$('#cpMon').textContent=fmt(21283+CADP.filter(p=>p.mon).length);
   $('#cpAll').onclick=()=>{all?L.forEach(p=>CS.sel.delete(p.id)):L.forEach(p=>CS.sel.add(p.id));drawCadP()};
   $$('[data-cp]').forEach(b=>b.onclick=()=>{const id=b.dataset.cp;CS.sel.has(id)?CS.sel.delete(id):CS.sel.add(id);drawCadP()});
@@ -1514,24 +1588,28 @@ function openMonAdd(){modal(`<div><div class="eyebrow">Sem cadastro no CRM</div>
   upd();setTimeout(()=>$('#maT').focus(),80)}
 
 /* ---------- MONITORAMENTO ---------- */
-let monF='all';
+let monF='all';const MF={cl:'',modo:'',ind:''};
 function vMon(){const c=k=>MON.filter(m=>m.st===k).length;
   const ROB=[['TJSP','ok','17:42',[6,7,7,8,7,8,9]],['TJRJ','warn','14:05',[7,6,4,3,5,2,3]],['TJMG','ok','17:40',[5,6,6,6,7,7,7]],['TJRS','ok','17:38',[6,6,7,7,6,7,8]],['TRT-2','ok','17:31',[4,5,5,6,6,6,7]],['TJBA','bad','09:12',[5,4,2,1,0,0,0]]];
   $('#page').innerHTML=`<section class="view">
   <div class="ph"><div><h1><span class="ln">Monitoramento</span></h1><p>Acompanhe dados específicos de processos que você já tem no CRM: capa, citação, audiência, habilitação e liminar. Ausência de indicativo só vale como sinal se a consulta funcionou.</p></div>
-  <div class="acts"><button class="btn p" id="monAdd">${ic('mon')}Monitorar processos</button></div></div>
+  <div class="acts"><button class="btn s" id="monEx">${ic('dl')}Exportar</button><button class="btn p" id="monAdd">${ic('mon')}Monitorar processos</button></div></div>
   <div class="pipe">
    <div class="st" style="--c:var(--fg-3)"><span class="l"><i class="dotl" style="--c:var(--fg-3)"></i>Na fila</span><span class="v" data-to="${c('fila')+1204}">0</span><span class="note">aguardando robô</span><span class="flow"></span></div>
    <div class="st" style="--c:var(--brand)"><span class="l"><i class="dotl live" style="--c:var(--brand)"></i>Consultando agora</span><span class="v" data-to="${c('run')+388}">0</span><span class="note">em tribunais</span><span class="flow"></span></div>
    <div class="st" style="--c:var(--ok)"><span class="l"><i class="dotl" style="--c:var(--ok)"></i>Atualizados hoje</span><span class="v" data-to="${c('ok')+17462}">0</span><span class="note">consulta bem-sucedida</span></div>
    <div class="st" style="--c:var(--bad)"><span class="l"><i class="dotl" style="--c:var(--bad)"></i>Com falha</span><span class="v" data-to="${c('falha')+297}">0</span><span class="note">nova tentativa automática</span></div>
   </div>
-  <div class="card"><div class="tb"><label class="search">${ic('search').replace('<svg','<svg width="14" height="14"')}<input id="mq" placeholder="Buscar CNJ ou cliente"></label><div class="pills" id="mf"></div></div>
+  <div class="card"><div class="tb"><label class="search">${ic('search').replace('<svg','<svg width="14" height="14"')}<input id="mq" placeholder="Buscar CNJ ou cliente"></label>
+  <select class="sel fsel" id="mfC" aria-label="Cliente"><option value="">Todos os clientes</option>${CL.map(c=>`<option ${MF.cl===c?'selected':''}>${c}</option>`).join('')}</select>
+  <select class="sel fsel" id="mfM" aria-label="Modo"><option value="">Todos os modos</option><option ${MF.modo==='Consulta + Mon'?'selected':''}>Consulta + Mon</option><option ${MF.modo==='Só monitorar'?'selected':''}>Só monitorar</option></select>
+  <select class="sel fsel" id="mfI" aria-label="Monitorando"><option value="">Qualquer indicativo</option>${INDS.map(([k,l])=>`<option value="${k}" ${MF.ind===k?'selected':''}>Monitora ${l.toLowerCase()}</option>`).join('')}</select>
+  <span class="fsep"></span><div class="pills" id="mf"></div></div>
   <div class="lgd"><span>${fb('cit','on')} encontrado, com a data</span><span>${fb('cit','off')} monitorando, nada encontrado</span><span>${fb('cit','na')} não monitora</span></div>
   <div class="tw"><table><thead><tr><th>Processo</th><th>Cliente</th><th title="Consulta + Mon: cadastrado e monitorado. Só monitorar: apenas acompanha indicativos.">Modo</th><th>Citação</th><th>Audiência</th><th>Habilitação</th><th>Liminar</th><th>Status</th><th>Última varredura</th><th style="text-align:right">Ações</th></tr></thead><tbody id="mtb"></tbody></table></div>
   <div class="foot"><span id="mft"></span><span>Exibindo amostra da carteira</span></div></div></section>`;
   animMetrics();
-  const draw=(anim)=>{const q=($('#mq').value||'').toLowerCase().replace(/[.\-]/g,'');const sp={nohab:m=>m.inds.has('hab')&&!m.habD&&m.st!=='fila',aud7:m=>m.audD&&m.audD>=today&&m.audD<=addD(today,7)};const L=MON.filter(m=>(monF==='all'||(sp[monF]?sp[monF](m):m.st===monF))&&(!q||(m.cnj.replace(/[.\-]/g,'')+m.cl).toLowerCase().includes(q)));
+  const draw=(anim)=>{const q=($('#mq').value||'').toLowerCase().replace(/[.\-]/g,'');const sp={nohab:m=>m.inds.has('hab')&&!m.habD&&m.st!=='fila',aud7:m=>m.audD&&m.audD>=today&&m.audD<=addD(today,7)};const L=MON.filter(m=>(monF==='all'||(sp[monF]?sp[monF](m):m.st===monF))&&(!MF.cl||m.cl===MF.cl)&&(!MF.modo||m.modo2===MF.modo)&&(!MF.ind||m.inds.has(MF.ind))&&(!q||(m.cnj.replace(/[.\-]/g,'')+m.cl).toLowerCase().includes(q)));
     $('#mf').innerHTML=[['all','Todos'],['ok','Atualizados'],['run','Consultando'],['fila','Na fila'],['falha','Com falha'],['nohab','Sem habilitação'],['aud7','Audiência em 7 dias']].map(([k,l])=>`<button class="pf ${monF===k?'on':''}" data-k="${k}">${l}</button>`).join('');
     $$('#mf .pf').forEach(b=>b.onclick=()=>{monF=b.dataset.k;draw(true)});
     const stc={ok:'<span class="chip ok"><i></i>Atualizado</span>',run:'<span class="chip br"><i class="dotl live" style="--c:var(--brand);width:6px;height:6px"></i>Consultando</span>',fila:'<span class="chip"><i></i>Na fila</span>',falha:'<span class="chip bad"><i></i>Falha na consulta</span>'};
@@ -1543,6 +1621,8 @@ function vMon(){const c=k=>MON.filter(m=>m.st===k).length;
     $('#mft').textContent=`${L.length} processos`;
     $$('[data-v]').forEach(b=>b.onclick=()=>openMon(b.dataset.v));
     $$('[data-rt]').forEach(b=>b.onclick=()=>{const m=MON.find(x=>x.id===b.dataset.rt);m.st='run';draw();toast('Nova consulta enviada ao robô');setTimeout(()=>{m.st='ok';m.last=today;m.hh='17:58';if(location.hash==='#monitoramento')draw();toast(`${m.cnj.slice(0,10)}… atualizado`,null,'ok')},2600)})};
+  [['#mfC','cl'],['#mfM','modo'],['#mfI','ind']].forEach(([i,k])=>$(i).onchange=e=>{MF[k]=e.target.value;draw(true)});
+  $('#monEx').onclick=()=>openExport({src:'Monitoramento'});
   $('#monAdd').onclick=()=>openReg('sm','');$('#mq').oninput=()=>draw();draw(true)}
 function openMon(id){const m=MON.find(x=>x.id===id),inds=IND.filter(x=>x.cnj===m.cnj);
   const log=[['17:'+String(10+Math.floor(rnd()*40)),m.st==='falha'?'bad':'ok',m.st==='falha'?'Tribunal fora do ar (HTTP 503)':'Consulta concluída · 2 andamentos novos'],['11:04','ok','Consulta concluída · sem andamentos novos'],['06:02','ok','Consulta concluída · 1 andamento novo'],['ontem 17:51','warn','Captcha resolvido após nova tentativa']];
@@ -1562,13 +1642,17 @@ function jobHTML(j){return `<div class="job ${j.st}" id="job-${j.id}"><div class
   ${j.st==='run'||j.st==='queue'?`<div class="prog"><b style="width:${j.prog}%"></b></div>`:''}
   ${j.st==='fail'?`<div class="note" style="color:var(--bad);margin-top:4px">${j.err}</div>`:''}
   ${j.st==='done'&&j.open?`<div class="manifest"><span>lote</span><span>${j.id}</span><span>recorte</span><span>${j.per}</span><span>registros</span><span>${fmt(j.reg)}</span><span>colunas</span><span>${j.cols.join(', ')}</span><span>conferência</span><span>sha256 ${j.id.toLowerCase().replace(/-/g,'')}a91f3c…</span></div>`:''}</div>
-  <div class="ra">${j.st==='done'?`<button class="btn g sm" data-man="${j.id}">${j.open?'Ocultar':'Manifesto'}</button><button class="btn s sm" data-get="${j.id}">${ic('dl')}Baixar .xlsx</button>`:j.st==='fail'?`<button class="btn s sm" data-retry="${j.id}">Tentar de novo</button>`:`<button class="btn g sm" data-cancel="${j.id}">Cancelar</button>`}</div></div>`}
+  <div class="ra">${j.st==='done'?`<button class="btn g sm" data-man="${j.id}">${j.open?'Ocultar':'Manifesto'}</button><button class="btn s sm" data-get="${j.id}">${ic('dl')}Baixar .${j.fmt||'xlsx'}</button>`:j.st==='fail'?`<button class="btn s sm" data-retry="${j.id}">Tentar de novo</button>`:`<button class="btn g sm" data-cancel="${j.id}">Cancelar</button>`}</div></div>`}
 function vRel(){
   $('#page').innerHTML=`<section class="view"><div class="ph"><div><h1><span class="ln">Relatórios</span></h1><p>Peça a exportação e siga trabalhando. Avisamos quando o arquivo estiver pronto. Cada lote guarda o manifesto do que foi entregue.</p></div>
   <div class="acts"><button class="btn p" id="newJ">${ic('rel')}Nova exportação</button></div></div>
   <div class="metrics">${metric('Exportações nos últimos 7 dias',42,'média de 6 por dia',null)+metric('Tempo médio de geração',38,'segundos para até 50 mil linhas',null)+metric('Prontos para baixar',JOBS.filter(j=>j.st==='done').length,'ficam disponíveis por 30 dias',null,'var(--ok)')+metric('Com falha',JOBS.filter(j=>j.st==='fail').length,'podem ser refeitos com 1 clique',null,'var(--bad)')}</div>
-  <div class="jobs" id="jobs"></div></section>`;animMetrics();drawJobs();$('#newJ').onclick=()=>openExport({})}
-function drawJobs(){const el=$('#jobs');if(!el)return;el.innerHTML=JOBS.map(jobHTML).join('');
+  <div class="jtb"><label class="search">${ic('search').replace('<svg','<svg width="14" height="14"')}<input id="jfQ" placeholder="Buscar por nome, lote ou pessoa"></label><select class="sel fsel" id="jfT" aria-label="Conteúdo"><option value="">Todo conteúdo</option><option>Citações</option><option>Audiências</option><option>Consolidado</option><option>Monitoramento</option></select><span class="fsep"></span><div class="pills" id="jfP"></div></div>
+  <div class="jobs" id="jobs"></div></section>`;animMetrics();drawJobs();$('#jfQ').oninput=e=>{JF.q=e.target.value;drawJobs()};$('#jfT').onchange=e=>{JF.tipo=e.target.value;drawJobs()};$('#newJ').onclick=()=>modal(`<div><div class="eyebrow">Nova exportação</div><h3>De onde exportar?</h3></div><p class="muted" style="margin:0">Você também pode exportar direto de cada tela, já com os filtros aplicados.</p><div class="reasons">${[['Central','Indicativos de citação e audiência'],['Cadastro','Processos cadastrados e o que foi encontrado'],['Monitoramento','Carteira monitorada e indicativos']].map(([k,d])=>`<button data-src="${k}"><span>${ic(k==='Central'?'central':k==='Cadastro'?'cad':'mon')}</span><span>${k==='Cadastro'?'Cadastro automatizado':k==='Central'?'Central de Indicativos':k}<small>${d}</small></span></button>`).join('')}</div><div style="display:flex;justify-content:flex-end"><button class="btn g" onclick="closeModal()">Cancelar</button></div>`)||$$('[data-src]').forEach(b=>b.onclick=()=>openExport({src:b.dataset.src}))}
+const JF={st:'all',tipo:'',q:''};
+function drawJobs(){const el=$('#jobs');if(!el)return;const L=JOBS.filter(j=>(JF.st==='all'||(JF.st==='run'?['run','queue'].includes(j.st):j.st===JF.st))&&(!JF.tipo||j.tipo===JF.tipo)&&(!JF.q||(j.nome+j.id+j.quem).toLowerCase().includes(JF.q.toLowerCase())));
+  const jp=$('#jfP');if(jp){jp.innerHTML=[['all','Todos'],['run','Em andamento'],['done','Prontos'],['fail','Com falha']].map(([k,l])=>`<button class="pf ${JF.st===k?'on':''}" data-k="${k}">${l}</button>`).join('');$$('#jfP .pf').forEach(b=>b.onclick=()=>{JF.st=b.dataset.k;drawJobs()})}
+  el.innerHTML=L.map(jobHTML).join('')||'<div class="empty" style="border:1px solid var(--line-2)"><b>Nenhuma exportação neste filtro</b>Ajuste os filtros acima.</div>';
   $$('[data-man]').forEach(b=>b.onclick=()=>{const j=JOBS.find(x=>x.id===b.dataset.man);j.open=!j.open;drawJobs()});
   $$('[data-get]').forEach(b=>b.onclick=()=>toast('No protótipo o download fica simulado. O manifesto mostra o conteúdo do arquivo.'));
   $$('[data-retry]').forEach(b=>b.onclick=()=>{const j=JOBS.find(x=>x.id===b.dataset.retry);j.st='queue';j.prog=0;drawJobs();runJob(j)});
@@ -1576,23 +1660,43 @@ function drawJobs(){const el=$('#jobs');if(!el)return;el.innerHTML=JOBS.map(jobH
 function jobInd(){const r=JOBS.some(j=>j.st==='run'||j.st==='queue');$('#jobDot').hidden=!r;$('#ctJobs').textContent=JOBS.length}
 function runJob(j){jobInd();setTimeout(()=>{j.st='run';j.prog=3;drawJobs();j.t=setInterval(()=>{j.prog=Math.min(100,j.prog+4+Math.random()*9);
   const el=$(`#job-${j.id} .prog b`);if(el){el.style.width=j.prog+'%';const c=$(`#job-${j.id} .chip.br`);c&&(c.textContent=Math.round(j.prog)+'%')}
-  if(j.prog>=100){clearInterval(j.t);j.st='done';j.open=true;drawJobs();jobInd();toast(`${j.nome} está pronto`,null,'ok',{label:'Abrir',fn:()=>location.hash='relatorios'})}},450)},900)}
-let exp={tipo:'Citações',per:'hoje',cols:new Set(['CNJ','Cliente','Polo','Força','Texto do andamento','Data do ato','Data de consumo','Audiência vinculada'])};
-function openExport(o){if(o.tipo)exp.tipo=o.tipo;
-  const COLS=['CNJ','Cliente','Polo','Tribunal','Força','Texto do andamento','Data do ato','Data de consumo','Audiência vinculada','Status de triagem','Quem triou'];
-  modal(`<div><div class="eyebrow">Exportação em segundo plano</div><h3>Nova exportação</h3></div>
-  <div class="fld"><label>Conteúdo</label>${seg('eT',[['Consolidado','Consolidado'],['Citações','Citações'],['Audiências','Audiências'],['Monitoramento','Carteira']],exp.tipo)}</div>
-  <div class="fld"><label>Período pela data de consumo</label>${seg('eP',[['hoje','Lote de hoje'],['7d','7 dias'],['30d','30 dias'],['tudo','Tudo']],exp.per)}</div>
-  <div class="fld"><label>Colunas</label><div class="chks" id="eC">${COLS.map(c=>`<button class="ck ${exp.cols.has(c)?'on':''}" data-c="${c}">${c}</button>`).join('')}</div><span class="note">Data do ato e data de consumo vêm marcadas por padrão.</span></div>
-  <div class="blk" style="flex-direction:row;align-items:center;justify-content:space-between"><div><div style="font-weight:500" class="num" id="eEst"></div><div class="note">Você pode continuar navegando enquanto o arquivo é gerado.</div></div></div>
-  <div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn g" id="eX">Cancelar</button><button class="btn p" id="eGo">Gerar exportação</button></div>`);
-  requestAnimationFrame(()=>{placePill('eT');placePill('eP')});
-  const est=()=>{const n={hoje:48,'7d':2140*5,'30d':41820,tudo:212406}[exp.per]*(exp.tipo==='Monitoramento'?4:1);$('#eEst').textContent=`≈ ${fmt(n)} registros`;return n};est();
-  const wire=(id,k)=>$$('#'+id+' button').forEach(b=>b.onclick=()=>{exp[k]=b.dataset.k;$$('#'+id+' button').forEach(x=>x.classList.toggle('on',x===b));placePill(id);est()});wire('eT','tipo');wire('eP','per');
-  $$('#eC .ck').forEach(b=>b.onclick=()=>{const c=b.dataset.c;exp.cols.has(c)?exp.cols.delete(c):exp.cols.add(c);b.classList.toggle('on')});
-  $('#eX').onclick=closeModal;
-  $('#eGo').onclick=()=>{const n=est();const j={id:'R-2611-'+String(JOBS.length+1).padStart(2,'0'),nome:`${exp.tipo} · ${({hoje:'lote de hoje','7d':'últimos 7 dias','30d':'últimos 30 dias',tudo:'histórico completo'})[exp.per]}`,tipo:exp.tipo,per:({hoje:'06/11/2026','7d':'31/10 a 06/11','30d':'08/10 a 06/11',tudo:'Todo o período'})[exp.per],reg:n,st:'queue',prog:0,quem:'Lucas Ferreira',at:'agora',cols:[...exp.cols]};
-    JOBS.unshift(j);closeModal();drawJobs();runJob(j);toast('Exportação iniciada. Avisamos quando estiver pronta.',null,null,{label:'Acompanhar',fn:()=>location.hash='relatorios'})}}
+  if(j.prog>=100){clearInterval(j.t);j.st='done';j.open=true;drawJobs();jobInd();toast(`${j.nome} está pronto em Relatórios`,null,'ok',location.hash==='#relatorios'?null:{label:'Ver em Relatórios',fn:()=>location.hash='relatorios'})}},450)},900)}
+/* ---------- exportação contextual e assíncrona ---------- */
+const ECOLS={
+ Central:['CNJ','Cliente','Polo','Tribunal','Tipo','Força','Texto do andamento','Data do ato','Data de consumo','Audiência vinculada','Status de triagem','Motivo do descarte','Quem triou'],
+ Cadastro:['CNJ','ID da solicitação','Solicitante','Cliente','Modo','Capa encontrada','Citado','Audiência futura','Liminar','Habilitado','Monitorando','Situação','Data de inserção'],
+ Monitoramento:['CNJ','Cliente','Tribunal','Modo','Citação','Data da citação','Audiência','Data da audiência','Habilitação','Liminar','Status do robô','Última varredura']};
+const EDEF={Central:['CNJ','Cliente','Tipo','Força','Data do ato','Data de consumo','Status de triagem'],Cadastro:['CNJ','Cliente','Modo','Capa encontrada','Citado','Habilitado','Situação'],Monitoramento:['CNJ','Cliente','Modo','Citação','Data da citação','Audiência','Data da audiência','Habilitação']};
+const exp={fmt:'xlsx',goRel:false,useF:true};
+function expCtx(o){const src=o.src||'Central';let fil=[],n=0,label=src;
+  if(src==='Central'){const tl={all:'Consolidado',cit:'Citações',aud:'Audiências'}[S.tab];fil=[`Serviço: ${tl}`,{pend:'Pendentes',val:'Validados',desc:'Descartados',all:'Todos os status'}[S.st]];if(S.cl)fil.push(S.cl);if(S.q)fil.push(`Busca "${S.q}"`);n=rows().filter(x=>S.st==='all'||x.status===S.st).length;label=`Central · ${tl}`}
+  if(src==='Cadastro'){if(CS.modo)fil.push(CS.modo);if(CS.ach)fil.push({capa:'Capa encontrada',cit:'Citação encontrada',aud:'Audiência encontrada',hab:'Habilitação encontrada',mon:'Monitorando'}[CS.ach]);if(CS.sit)fil.push({ok:'Concluído',upd:'Atualizando',crm:'Importado no CRM'}[CS.sit]);if(CS.cl)fil.push(CS.cl);if(CS.q)fil.push(`Busca "${CS.q}"`);n=fil.length?$$('#cadP tr .cb').length:99389;label='Cadastro automatizado'}
+  if(src==='Monitoramento'){if(monF!=='all')fil.push({ok:'Atualizados',run:'Consultando',fila:'Na fila',falha:'Com falha',nohab:'Sem habilitação',aud7:'Audiência em 7 dias'}[monF]);if(MF.cl)fil.push(MF.cl);if(MF.modo)fil.push(MF.modo);if(MF.ind)fil.push('Monitora '+INDS.find(i=>i[0]===MF.ind)[1].toLowerCase());n=fil.length?$$('#mtb tr').length:19355;label='Monitoramento'}
+  return{src,fil,n,label,tot:{Central:IND.length,Cadastro:99389,Monitoramento:19355}[src]}}
+function openExport(o){o=o||{};const c=expCtx(o);const key=c.src;exp.cols=exp.cols&&exp.colsKey===key?exp.cols:new Set(EDEF[key]);exp.colsKey=key;exp.useF=c.fil.length>0;
+  modal(`<div><div class="eyebrow">Exportar · ${c.label}</div><h3>Solicitar exportação</h3></div>
+  <div class="fld"><label>O que exportar</label><div class="opts" style="grid-template-columns:1fr 1fr" id="eS">
+   <button class="op ${exp.useF?'on':''}" data-u="1" ${c.fil.length?'':'aria-disabled="true"'}><span class="cb ${exp.useF?'on':''}"></span><span><b>O que está na tela</b><small>${c.fil.length?c.fil.join(', '):'Nenhum filtro aplicado'}</small></span></button>
+   <button class="op ${exp.useF?'':'on'}" data-u="0"><span class="cb ${exp.useF?'':'on'}"></span><span><b>Tudo de ${c.label.split(' · ')[0]}</b><small>Sem filtros</small></span></button></div></div>
+  <div class="fld"><label>Formato</label>${seg('eF',[['xlsx','Excel (.xlsx)'],['csv','CSV'],['pdf','PDF']],exp.fmt)}<span class="note" id="eFn"></span></div>
+  <div class="fld"><label>Colunas</label><div class="chks" id="eC">${ECOLS[key].map(x=>`<button class="ck ${exp.cols.has(x)?'on':''}" data-c="${x}">${x}</button>`).join('')}</div></div>
+  <label class="tg" style="cursor:pointer"><span><span style="font-weight:500">Abrir Relatórios ao solicitar</span><span class="note" style="display:block">Desligado, você continua nesta tela e recebe um aviso quando o arquivo ficar pronto.</span></span><button type="button" class="sw ${exp.goRel?'on':''}" id="eGoR" role="switch" aria-checked="${exp.goRel}" aria-label="Abrir Relatórios ao solicitar"></button></label>
+  <div style="display:flex;gap:12px;justify-content:flex-end;align-items:center"><span class="muted num" id="eEst" style="margin-right:auto;font-size:13px"></span><button class="btn g" id="eX">Cancelar</button><button class="btn p" id="eGo">Solicitar exportação</button></div>`);
+  requestAnimationFrame(()=>placePill('eF'));
+  const est=()=>{const n=exp.useF?c.n:c.tot;$('#eEst').textContent=`≈ ${fmt(n)} registros, ${exp.cols.size} colunas`;$('#eFn').textContent=exp.fmt==='pdf'?'PDF fica limitado a 5 mil linhas, para leitura e impressão.':exp.fmt==='csv'?'CSV separado por ponto e vírgula, pronto para importar em outros sistemas.':'Excel com filtros e colunas de data já formatadas.';$('#eGo').disabled=!exp.cols.size;return n};
+  $$('#eS .op').forEach(b=>b.onclick=()=>{if(b.getAttribute('aria-disabled'))return;exp.useF=b.dataset.u==='1';$$('#eS .op').forEach(x=>{const on=x===b;x.classList.toggle('on',on);$('.cb',x).classList.toggle('on',on)});est()});
+  $$('#eF button').forEach(b=>b.onclick=()=>{exp.fmt=b.dataset.k;$$('#eF button').forEach(x=>x.classList.toggle('on',x===b));placePill('eF');est()});
+  $$('#eC .ck').forEach(b=>b.onclick=()=>{const x=b.dataset.c;exp.cols.has(x)?exp.cols.delete(x):exp.cols.add(x);b.classList.toggle('on');est()});
+  $('#eGoR').onclick=e=>{e.preventDefault();exp.goRel=!exp.goRel;$('#eGoR').classList.toggle('on',exp.goRel);$('#eGoR').setAttribute('aria-checked',exp.goRel)};
+  $('#eX').onclick=closeModal;est();
+  $('#eGo').onclick=()=>{const n=est();const j={id:'R-2611-'+String(JOBS.length+1).padStart(2,'0'),nome:`${c.label}${exp.useF&&c.fil.length?' (filtrado)':''}`,tipo:c.src==='Central'?({all:'Consolidado',cit:'Citações',aud:'Audiências'}[S.tab]):c.src,per:exp.useF&&c.fil.length?c.fil.join(', '):'Sem filtros',reg:n,st:'queue',prog:0,quem:'Lucas Ferreira',at:'agora',cols:[...exp.cols],fmt:exp.fmt};
+    JOBS.unshift(j);drawJobs();runJob(j);jobInd();
+    if(exp.goRel){closeModal();location.hash='relatorios';toast('Exportação solicitada. Ela aparece no topo da lista.');return}
+    modal(`<div style="display:flex;flex-direction:column;gap:14px;align-items:flex-start"><div class="eyebrow">Exportação solicitada</div><h3>Estamos gerando o arquivo</h3>
+     <p class="muted" style="margin:0">${fmt(n)} registros em ${exp.fmt.toUpperCase()}. Quando terminar, o arquivo fica disponível em <b style="color:var(--fg);font-weight:500">Relatórios</b> por 30 dias e você recebe um aviso aqui.</p>
+     <div class="manifest" style="width:100%;margin:0"><span>lote</span><span>${j.id}</span><span>conteúdo</span><span>${j.nome}</span><span>recorte</span><span>${j.per}</span></div>
+     <div style="display:flex;gap:8px;justify-content:flex-end;width:100%"><button class="btn g" id="eStay">Continuar aqui</button><button class="btn p" id="eRel">${ic('rel')}Ir para Relatórios</button></div></div>`);
+    $('#eStay').onclick=closeModal;$('#eRel').onclick=()=>{closeModal();location.hash='relatorios'}}}
 $('#jobBtn').onclick=()=>location.hash='relatorios';
 
 /* ---------- reportar FN ---------- */
@@ -1620,7 +1724,7 @@ function drawPal(){const q=$('#palIn').value.toLowerCase().replace(/[.\-]/g,'');
 function runPal(it){closePal();if(!it)return;if(it.id){location.hash='central';setTimeout(()=>openInd(it.id),80)}else if(it.go==='export')openExport({});else if(it.go==='fn')openFN();else if(it.go==='monadd'){location.hash='monitoramento';setTimeout(()=>openReg('sm',''),300)}else location.hash=it.go}
 $('#palIn').oninput=()=>{palI=0;drawPal()};$('#palIn').onkeydown=e=>{const it=$('#palList').items||[];if(e.key==='ArrowDown'){palI=Math.min(it.length-1,palI+1);drawPal();e.preventDefault()}if(e.key==='ArrowUp'){palI=Math.max(0,palI-1);drawPal();e.preventDefault()}if(e.key==='Enter')runPal(it[palI])};
 $('#pal').onclick=e=>{if(e.target.id==='pal')closePal()};$('#kbar').onclick=openPal;
-$('#themeBtn').onclick=()=>{const r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark'};
+$('#themeBtn').onclick=()=>{const r=document.documentElement,t=r.dataset.theme==='dark'?'light':'dark';r.dataset.theme=t;try{localStorage.setItem('jm-theme',t)}catch(e){}};
 window.addEventListener('resize',()=>$$('.seg').forEach(s=>placePill(s.id)));
 
 /* ---------- DESIGN SYSTEM (Toga v2) ---------- */
@@ -1703,6 +1807,9 @@ function guilloche(){const c=$('#guil');if(!c)return;const x=c.getContext('2d'),
    x.globalAlpha=1;t+=.004;if(!reduce&&document.body.contains(c))raf=requestAnimationFrame(draw)};draw()}
 
 /* ---------- boot ---------- */
+try{const t=localStorage.getItem('jm-theme');document.documentElement.dataset.theme=t==='dark'?'dark':'light'}catch(e){document.documentElement.dataset.theme='light'}
+try{if(localStorage.getItem('jm-mini')==='1')$('.app').classList.add('mini')}catch(e){}
+$('#colB').onclick=()=>{const m=$('.app').classList.toggle('mini');$('#colB').setAttribute('aria-label',m?'Expandir menu':'Recolher menu');$('#colB').title=m?'Expandir menu':'Recolher menu';try{localStorage.setItem('jm-mini',m?'1':'0')}catch(e){}setTimeout(()=>$$('.seg').forEach(x=>x.id&&placePill(x.id)),520)};
 route();updCounts();jobInd();
 </script>
 
